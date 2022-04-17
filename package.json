@@ -1,0 +1,13 @@
+{
+	"config": {
+		"commitizen": {
+			"path": "node_modules/cz-customizable"
+		},
+		"cz-customizable": {
+			"config": "config/git/commitizen.js"
+		}
+	},
+	"devDependencies": {
+		"cz-customizable": "^5.10.0"
+	}
+}
