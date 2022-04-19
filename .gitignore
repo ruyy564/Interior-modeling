@@ -3,3 +3,5 @@ build/
 node_modules/
 .idea/
 my_notes.txt
+__tests__
+/dist
