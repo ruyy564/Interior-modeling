@@ -1,36 +1,53 @@
 {
-  "name": "client",
-  "version": "1.0.0",
-  "description": "frontend",
-  "main": "index.js",
-  "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --mode production ",
-    "dev": "cross-env NODE_ENV=development webpack --mode development ",
-    "start":"cross-env NODE_ENV=development webpack-dev-server --mode development  --open"
-  },
-  "browserslist": ">0.25%, not dead",
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.17.9",
-    "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/preset-typescript": "^7.16.7",
-    "babel-loader": "^8.2.4",
-    "clean-webpack-plugin": "^4.0.0",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.7.1",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^5.5.0",
-    "mini-css-extract-plugin": "^2.6.0",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.8.1"
-  },
-  "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  }
+    "name": "mixing-html-and-webgl",
+    "version": "1.0.0",
+    "description": "Adding HTML into the scene.",
+    "keywords": [
+        "html",
+        "transforms",
+        "drei"
+    ],
+    "main": "src/index.jsx",
+    "dependencies": {
+        "@react-three/cannon": "^6.3.0",
+        "@react-three/drei": "9.5.3",
+        "@react-three/fiber": "8.0.12",
+        "antd": "4.20.1",
+        "leva": "^0.9.23",
+        "react": "18.1.0",
+        "react-dom": "18.1.0",
+        "react-scripts": "5.0.1",
+        "recoil": "^0.7.2",
+        "three": "0.139.2"
+    },
+	"husky": {
+		"hooks": {
+			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS -g config/git/commitlint.js"
+		}
+	},
+	"config": {
+		"commitizen": {
+			"path": "node_modules/cz-customizable"
+		},
+		"cz-customizable": {
+			"config": "config/git/commitizen.js"
+		}
+	},
+    "devDependencies": {
+        "commitizen": "^4.2.4",
+        "cz-customizable": "^6.3.0",
+        "husky": "^7.0.4"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ]
 }

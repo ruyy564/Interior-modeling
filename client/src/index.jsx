@@ -1,13 +1,7 @@
-import './styles/styles.css';
-import React from 'react';
-import { render } from 'react-dom';
+import './styles.css'
+import App from './App'
 import { createRoot } from 'react-dom/client';
 
-const container = document.getElementById('app');
-const root = createRoot(container); 
-
-const App = () => (
-  <div>Hello</div>
-);
-
+const container = document.getElementById('root');
+const root = createRoot(container);
 root.render(<App tab="home" />);
