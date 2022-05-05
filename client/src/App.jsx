@@ -17,10 +17,12 @@ import {
   Mesh,
   gridHelper,
   group,
+  ObjectLoader,
 } from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { MyLoader } from './MyLoader';
 const useStore = create((set) => ({
   target: null,
   setTarget: (target) => set({ target }),
@@ -35,8 +37,24 @@ export default function App() {
     mode: { value: 'translate', options: ['translate', 'rotate', 'scale'] },
   });
 
-  const handleLoad = () => {
-    //console.log(file.current.value);
+  const handleLoad = (elm) => {
+    console.log(elm.current.files);
+    new Response(elm.current.files[0]).json().then(
+      (json) => {
+        var loader = new MyLoader();
+        console.log(json);
+        loader.parse(json, null, function (gltf) {
+          console.log(gltf);
+          setScene({
+            ...scene,
+            children: [...scene.children, ...gltf.scene.children],
+          });
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   };
 
   function loadFromFile() {
@@ -81,7 +99,7 @@ export default function App() {
               if (element?.type === 'Mesh') return true;
             })
             .map((element, index) => {
-              //console.log(scene.children);
+              //console.log(element);
               return (
                 <Model object={element} cam={refControls} key={element.uuid} />
               );
@@ -90,7 +108,7 @@ export default function App() {
 
       <button onClick={() => handleExport(scene)}>Export ELTF</button>
       <button onClick={loadFromFile}>Add wall</button>
-      <input type="file" ref={file} onClick={handleLoad} />
+      <input type="file" ref={file} onChange={handleLoad.bind(null, file)} />
     </>
   );
 }
@@ -135,6 +153,7 @@ function saveString(text, filename) {
 const handleExport = (scene) => {
   const exporter = new GLTFExporter();
   const result = exporter.parse(scene, function (gltf) {
+    console.log(gltf);
     saveString(JSON.stringify(gltf), `${2}.gltf`);
   });
 };
