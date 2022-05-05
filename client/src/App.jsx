@@ -38,23 +38,24 @@ export default function App() {
   });
 
   const handleLoad = (elm) => {
-    console.log(elm.current.files);
-    new Response(elm.current.files[0]).json().then(
-      (json) => {
-        var loader = new MyLoader();
-        console.log(json);
-        loader.parse(json, null, function (gltf) {
-          console.log(gltf);
-          setScene({
-            ...scene,
-            children: [...scene.children, ...gltf.scene.children],
+    if (elm.current.files) {
+      new Response(elm.current.files[0]).json().then(
+        (json) => {
+          var loader = new MyLoader();
+
+          loader.parse(json, function (gltf) {
+            setScene({
+              ...scene,
+              children: [...scene.children, ...gltf.scene.children],
+            });
           });
-        });
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+    elm.current.value = '';
   };
 
   function loadFromFile() {

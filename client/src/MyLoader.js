@@ -114,65 +114,6 @@ class MyLoader extends Loader {
     });
   }
 
-  load(url, onLoad, onProgress, onError) {
-    const scope = this;
-
-    let resourcePath;
-
-    if (this.resourcePath !== '') {
-      resourcePath = this.resourcePath;
-    } else if (this.path !== '') {
-      resourcePath = this.path;
-    } else {
-      resourcePath = LoaderUtils.extractUrlBase(url);
-    }
-
-    // Tells the LoadingManager to track an extra item, which resolves after
-    // the model is fully loaded. This means the count of items loaded will
-    // be incorrect, but ensures manager.onLoad() does not fire early.
-    this.manager.itemStart(url);
-
-    const _onError = function (e) {
-      if (onError) {
-        onError(e);
-      } else {
-        console.error(e);
-      }
-
-      scope.manager.itemError(url);
-      scope.manager.itemEnd(url);
-    };
-
-    const loader = new FileLoader(this.manager);
-
-    loader.setPath(this.path);
-    loader.setResponseType('arraybuffer');
-    loader.setRequestHeader(this.requestHeader);
-    loader.setWithCredentials(this.withCredentials);
-
-    loader.load(
-      url,
-      function (data) {
-        try {
-          scope.parse(
-            data,
-            resourcePath,
-            function (gltf) {
-              onLoad(gltf);
-              console.log('gltf', gltf);
-              scope.manager.itemEnd(url);
-            },
-            _onError
-          );
-        } catch (e) {
-          _onError(e);
-        }
-      },
-      onProgress,
-      _onError
-    );
-  }
-
   setDRACOLoader(dracoLoader) {
     this.dracoLoader = dracoLoader;
     return this;
@@ -210,34 +151,11 @@ class MyLoader extends Loader {
     return this;
   }
 
-  parse(data, path, onLoad, onError) {
-    let content;
+  parse(data, onLoad, onError) {
     const extensions = {};
     const plugins = {};
-
-    // if (typeof data === 'string') {
-    //   content = data;
-    // } else {
-    //   const magic = LoaderUtils.decodeText(new Uint8Array(data, 0, 4));
-
-    //   if (magic === BINARY_EXTENSION_HEADER_MAGIC) {
-    //     try {
-    //       extensions[EXTENSIONS.KHR_BINARY_GLTF] = new GLTFBinaryExtension(
-    //         data
-    //       );
-    //     } catch (error) {
-    //       if (onError) onError(error);
-    //       return;
-    //     }
-
-    //     content = extensions[EXTENSIONS.KHR_BINARY_GLTF].content;
-    //   } else {
-    //     content = LoaderUtils.decodeText(new Uint8Array(data));
-    //   }
-    // }
-
     const json = data;
-    console.log('json', json);
+
     if (json.asset === undefined || json.asset.version[0] < 2) {
       if (onError)
         onError(
@@ -249,7 +167,6 @@ class MyLoader extends Loader {
     }
 
     const parser = new GLTFParser(json, {
-      path: path || this.resourcePath || '',
       crossOrigin: this.crossOrigin,
       requestHeader: this.requestHeader,
       manager: this.manager,
@@ -316,7 +233,6 @@ class MyLoader extends Loader {
     parser.setExtensions(extensions);
     parser.setPlugins(plugins);
     parser.parse(onLoad, onError);
-    console.log('json', json);
   }
 
   parseAsync(data, path) {
