@@ -18,6 +18,8 @@ import {
   gridHelper,
   group,
   ObjectLoader,
+  Scene,
+  Object3D,
 } from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -44,10 +46,12 @@ export default function App() {
           var loader = new MyLoader();
 
           loader.parse(json, function (gltf) {
-            setScene({
+            let ob = {
               ...scene,
               children: [...scene.children, ...gltf.scene.children],
-            });
+            };
+            ob.__proto__ = scene.__proto__;
+            setScene(ob);
           });
         },
         (err) => {
@@ -57,13 +61,22 @@ export default function App() {
     }
     elm.current.value = '';
   };
-
+  const handleExport = (scene) => {
+    console.log(scene);
+    const exporter = new GLTFExporter();
+    const result = exporter.parse(scene, function (gltf) {
+      //console.log(gltf);
+      saveString(JSON.stringify(gltf), `${2}.gltf`);
+    });
+  };
   function loadFromFile() {
     new GLTFLoader().load('wall.gltf', function (gltf) {
-      setScene({
+      let ob = {
         ...scene,
-        children: [...scene.children, gltf.scene.children[0]],
-      });
+        children: [...scene.children, ...gltf.scene.children],
+      };
+      ob.__proto__ = scene.__proto__;
+      setScene(ob);
     });
   }
   function handleLoadWall() {
@@ -150,11 +163,3 @@ function save(blob, filename) {
 function saveString(text, filename) {
   save(new Blob([text], { type: 'text/plain' }), filename);
 }
-
-const handleExport = (scene) => {
-  const exporter = new GLTFExporter();
-  const result = exporter.parse(scene, function (gltf) {
-    console.log(gltf);
-    saveString(JSON.stringify(gltf), `${2}.gltf`);
-  });
-};
