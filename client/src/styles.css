@@ -29,9 +29,9 @@ body {
 
 #root {
     margin-left: 5rem;
-    margin-top: 5rem;
-    width: 70%;
-    height: 70%;
+    margin-top: 1rem;
+    width: 50%;
+    height: 90%;
     background-color: rgba(11, 12, 12, 0.636);
     border: 5px solid #fff;
 }

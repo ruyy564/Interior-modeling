@@ -20,11 +20,14 @@ import {
   ObjectLoader,
   Scene,
   Object3D,
+  MeshBasicMaterial,
 } from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MyLoader } from './MyLoader';
+import { TLoader } from './TLoader';
+import { TextureLoader } from 'three/src/loaders/TextureLoader';
 const useStore = create((set) => ({
   target: null,
   setTarget: (target) => set({ target }),
@@ -38,7 +41,9 @@ export default function App() {
   const { mode } = useControls({
     mode: { value: 'translate', options: ['translate', 'rotate', 'scale'] },
   });
-
+  const texture = useLoader(TLoader, './dirt.jpg');
+  const test = new TextureLoader();
+  console.log(test);
   const handleLoad = (elm) => {
     if (elm.current.files) {
       new Response(elm.current.files[0]).json().then(
@@ -115,7 +120,12 @@ export default function App() {
             .map((element, index) => {
               //console.log(element);
               return (
-                <Model object={element} cam={refControls} key={element.uuid} />
+                <Model
+                  object={element}
+                  cam={refControls}
+                  key={element.uuid}
+                  t={texture}
+                />
               );
             })}
       </Canvas>
@@ -127,7 +137,7 @@ export default function App() {
   );
 }
 
-function Model({ object, cam }) {
+function Model({ object, cam, t }) {
   //console.log(object);
   const setTarget = useStore((state) => state.setTarget);
   const blockOrtoginationControll = (e) => {
@@ -141,6 +151,11 @@ function Model({ object, cam }) {
     setTarget(null);
     cam.current.enableRotate = true;
   };
+
+  object.material.map = t;
+  const geometry = new BoxGeometry(1, 1, 1);
+  const material = new MeshBasicMaterial({ map: t });
+  const mesh = new Mesh(geometry, material);
 
   return (
     <primitive
