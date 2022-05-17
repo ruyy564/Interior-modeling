@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const authRouter = require('./routes/authRouter');
 
 const PORT = process.env.PORT || 5000;
-const URL = 'mongodb://localhost:27017';
+const URL = 'mongodb://localhost:27017/design';
 const app = express();
 
 app.use(express.json());

@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const Role = require('../models/Role');
 
 class authController {
   async registration(req, res) {
@@ -21,7 +22,12 @@ class authController {
         return res.status(500).json({ message: 'Пользователь уже существует' });
       }
       const hashPassword = await bcrypt.hash(password, 12);
-      const user = new User({ email, password: hashPassword });
+      const userRole = await Role.findOne({ value: 'ADMIN' });
+      const user = new User({
+        email,
+        password: hashPassword,
+        roles: [userRole.value],
+      });
 
       await user.save();
       res.status(201).json({ message: 'Пользователь создан' });
@@ -56,11 +62,21 @@ class authController {
           message: 'Неверный пароль',
         });
       }
-      const token = jwt.sign({ userId: user.id }, 'Secret', {
+      const token = jwt.sign({ userId: user.id, roles: user.roles }, 'Secret', {
         expiresIn: '1h',
       });
 
-      res.json({ token, userId: user.id });
+      res.json({ token, userId: user.id, roles: user.roles });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async getUsers(req, res) {
+    try {
+      const users = await User.find();
+
+      res.json(users);
     } catch (e) {
       console.log(e);
     }
