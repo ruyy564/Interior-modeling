@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const Role = require('../models/Role');
 
 module.exports = (accessRoles) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     if (req.method === 'OPTIONS') {
       next();
     }
@@ -13,18 +13,13 @@ module.exports = (accessRoles) => {
       if (!token) {
         return res.status(400).json({ message: 'Пользователь не авторизован' });
       }
-      const { roles } = jwt.verify(token, 'Secret');
-      let hasRole = false;
+      const decodeData = jwt.verify(token, 'Secret');
+      const { value } = await Role.findOne({ _id: decodeData.role });
 
-      roles.forEach((role) => {
-        if (accessRoles.includes(role)) {
-          hasRole = true;
-        }
-      });
-
-      if (!hasRole) {
+      if (!accessRoles.includes(value)) {
         return res.status(400).json({ message: 'У пользователя нет доступа' });
       }
+      req.user = decodeData;
       next();
     } catch (e) {
       console.log(e);

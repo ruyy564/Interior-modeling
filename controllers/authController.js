@@ -22,11 +22,11 @@ class authController {
         return res.status(500).json({ message: 'Пользователь уже существует' });
       }
       const hashPassword = await bcrypt.hash(password, 12);
-      const userRole = await Role.findOne({ value: 'ADMIN' });
+      const { id } = await Role.findOne({ value: 'ADMIN' });
       const user = new User({
         email,
         password: hashPassword,
-        roles: [userRole.value],
+        role: id,
       });
 
       await user.save();
@@ -62,11 +62,11 @@ class authController {
           message: 'Неверный пароль',
         });
       }
-      const token = jwt.sign({ userId: user.id, roles: user.roles }, 'Secret', {
+      const token = jwt.sign({ userId: user.id, role: user.role }, 'Secret', {
         expiresIn: '1h',
       });
 
-      res.json({ token, userId: user.id, roles: user.roles });
+      res.json({ token, userId: user.id, roles: user.role });
     } catch (e) {
       console.log(e);
     }

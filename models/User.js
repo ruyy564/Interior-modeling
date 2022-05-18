@@ -10,18 +10,10 @@ const user = new Schema({
     type: String,
     required: true,
   },
-  projects: [
-    {
-      type: Types.ObjectId,
-      ref: 'Project',
-    },
-  ],
-  roles: [
-    {
-      type: String,
-      ref: 'Role',
-    },
-  ],
+  role: {
+    type: Types.ObjectId,
+    ref: 'Role',
+  },
 });
 
 module.exports = model('User', user);

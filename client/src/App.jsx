@@ -75,7 +75,7 @@ export default function App() {
     });
   };
   function loadFromFile() {
-    new GLTFLoader().load('wall.gltf', function (gltf) {
+    new GLTFLoader().load('wall.txt', function (gltf) {
       let ob = {
         ...scene,
         children: [...scene.children, ...gltf.scene.children],
