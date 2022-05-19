@@ -43,20 +43,26 @@ export default function App() {
   });
   const texture = useLoader(TLoader, './dirt.jpg');
   const test = new TextureLoader();
-  console.log(test);
-  const handleLoad = (elm) => {
+  const handleLoad = async (elm) => {
     if (elm.current.files) {
+      // const fileReader = new FileReader();
+      // fileReader.onload = function (fileLoadedEvent) {
+      //   const srcData = fileLoadedEvent.target.result;
+      //   console.log('srcData', srcData);
+      // };
+      // fileReader.readAsDataURL(elm.current.files[0]);
       new Response(elm.current.files[0]).json().then(
         (json) => {
           var loader = new MyLoader();
 
           loader.parse(json, function (gltf) {
-            let ob = {
-              ...scene,
-              children: [...scene.children, ...gltf.scene.children],
-            };
-            ob.__proto__ = scene.__proto__;
-            setScene(ob);
+            console.log('rfhn', gltf);
+            // let ob = {
+            //   ...scene,
+            //   children: [...scene.children, ...gltf.scene.children],
+            // };
+            // ob.__proto__ = scene.__proto__;
+            // setScene(ob);
           });
         },
         (err) => {
@@ -75,7 +81,7 @@ export default function App() {
     });
   };
   function loadFromFile() {
-    new GLTFLoader().load('wall.gltf', function (gltf) {
+    new GLTFLoader().load('wall.txt', function (gltf) {
       let ob = {
         ...scene,
         children: [...scene.children, ...gltf.scene.children],
@@ -95,6 +101,7 @@ export default function App() {
   }
   return (
     <>
+      <img id={'ip'} style={{ width: '100px', height: '100px' }} />
       <Canvas
         onPointerMissed={() => setTarget(null)}
         onCreated={({ gl, raycaster, scene }) => {
