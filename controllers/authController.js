@@ -2,7 +2,8 @@ const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const Role = require('../models/Role');
+const UserRole = require('../models/UserRole');
+const config = require('../config/common');
 
 class authController {
   async registration(req, res) {
@@ -15,16 +16,17 @@ class authController {
           message: 'Некорректные данные при регистрации',
         });
       }
-      const { email, password } = req.body;
+      const { email, password, nickname } = req.body;
       const candidate = await User.findOne({ email });
 
       if (candidate) {
-        return res.status(500).json({ message: 'Пользователь уже существует' });
+        return res.status(400).json({ message: 'Пользователь уже существует' });
       }
       const hashPassword = await bcrypt.hash(password, 12);
-      const { id } = await Role.findOne({ value: 'ADMIN' });
+      const { id } = await UserRole.findOne({ name: 'ADMIN' });
       const user = new User({
         email,
+        nickname,
         password: hashPassword,
         role: id,
       });
@@ -32,7 +34,7 @@ class authController {
       await user.save();
       res.status(201).json({ message: 'Пользователь создан' });
     } catch (e) {
-      res.status(500).json({ message: 'Не работает' });
+      res.status(400).json({ message: 'Пользователь не создан' });
       console.log(e);
     }
   }
@@ -62,13 +64,25 @@ class authController {
           message: 'Неверный пароль',
         });
       }
-      const token = jwt.sign({ userId: user.id, role: user.role }, 'Secret', {
-        expiresIn: '1h',
-      });
+      const token = jwt.sign(
+        { userId: user.id, role: user.role },
+        config.secret,
+        {
+          expiresIn: '12h',
+        }
+      );
 
-      res.json({ token, userId: user.id, roles: user.role });
+      res.json({
+        message: 'Пользователь авторизирован',
+        token,
+        userId: user.id,
+        roles: user.role,
+      });
     } catch (e) {
       console.log(e);
+      return res.status(400).json({
+        message: 'Ошибка при авторизации',
+      });
     }
   }
 

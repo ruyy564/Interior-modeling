@@ -10,9 +10,13 @@ const user = new Schema({
     type: String,
     required: true,
   },
+  nickname: {
+    type: String,
+    required: true,
+  },
   role: {
     type: Types.ObjectId,
-    ref: 'Role',
+    ref: 'UserRole',
   },
 });
 

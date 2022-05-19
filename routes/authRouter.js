@@ -1,7 +1,6 @@
 const Router = require('express');
 const { check } = require('express-validator');
 const authController = require('../controllers/authController');
-const roleMiddleware = require('../middleware/roleMiddleware');
 
 const router = new Router();
 
@@ -12,6 +11,7 @@ router.post(
   [
     check('email', 'Некорректный email').isEmail(),
     check('password', 'Мин длина пароля 6 символов').isLength({ min: 6 }),
+    check('nickname', 'Введите nickname').exists(),
   ],
   authController.registration
 );
@@ -20,7 +20,7 @@ router.post(
   '/login',
   [
     check('email', 'Некорректный email').normalizeEmail().isEmail(),
-    check('password', 'Ввудите пароль').exists(),
+    check('password', 'Введите пароль').exists(),
   ],
   authController.login
 );

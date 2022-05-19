@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const Role = require('../models/Role');
+const config = require('../config/common');
+const UserRole = require('../models/UserRole');
 
 module.exports = (accessRoles) => {
   return async (req, res, next) => {
@@ -13,10 +14,10 @@ module.exports = (accessRoles) => {
       if (!token) {
         return res.status(400).json({ message: 'Пользователь не авторизован' });
       }
-      const decodeData = jwt.verify(token, 'Secret');
-      const { value } = await Role.findOne({ _id: decodeData.role });
+      const decodeData = jwt.verify(token, config.secret);
+      const { name } = await UserRole.findOne({ _id: decodeData.role });
 
-      if (!accessRoles.includes(value)) {
+      if (!accessRoles.includes(name)) {
         return res.status(400).json({ message: 'У пользователя нет доступа' });
       }
       req.user = decodeData;
