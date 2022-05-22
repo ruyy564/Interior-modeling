@@ -151,8 +151,7 @@ label {
 }
 
 .auth-btn:hover {
-    background-color: #3f3f3fe5;
-    color: #ffffff;
+    background-color: rgba(163, 163, 163, 0.81);
 }
 
 button, input {

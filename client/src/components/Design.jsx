@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
 import {
@@ -54,7 +55,6 @@ export default function Main() {
       new Response(elm.current.files[0]).json().then(
         (json) => {
           var loader = new MyLoader();
-
           loader.parse(json, function (gltf) {
             console.log('rfhn', gltf);
             let ob = {

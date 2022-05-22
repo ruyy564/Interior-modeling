@@ -1,9 +1,9 @@
 import React from 'react';
-import Input from './Input';
-import Button from './Button';
-import Group from './Group';
-import Form from './Form';
-import BackgroundForm from './BackgroundForm';
+import Input from '../Common/Input';
+import Button from '../Common/Button';
+import Group from '../Common/Group';
+import Form from '../Common/Form';
+import BackgroundForm from '../Auth/BackgroundForm';
 
 export default function AuthForm({ authHandler }) {
   return (

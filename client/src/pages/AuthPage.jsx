@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import AuthForm from '../components/AuthForm';
-import RegForm from '../components/RegForm';
-import './Auth.css';
+import AuthForm from '../components/Auth/AuthForm';
+import RegForm from '../components/Auth/RegForm';
+import './authPage.css';
 
-export default function Auth() {
+export default function AuthPage() {
   const [auth, setAuth] = useState(true);
   const authHandler = () => {
     setAuth(!auth);

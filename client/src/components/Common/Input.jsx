@@ -10,7 +10,7 @@ export default function Input({ type, placeholder, icon, name }) {
         placeholder={placeholder}
       />
       <label htmlFor={name}>{placeholder}</label>
-      <span class="material-symbols-outlined">{icon}</span>
+      <span className="material-symbols-outlined">{icon}</span>
     </div>
   );
 }

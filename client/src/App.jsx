@@ -1,10 +1,9 @@
-import Main from './pages/Main';
-import Auth from './pages/Auth';
+import React from 'react';
+import { useRoutes } from './routes';
+import { BrowserRouter } from 'react-router-dom';
 
 export default function App() {
-  return (
-    <>
-      <Auth />
-    </>
-  );
+  const routes = useRoutes(true);
+
+  return <BrowserRouter>{routes}</BrowserRouter>;
 }
