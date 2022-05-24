@@ -14,7 +14,7 @@ export const useRoutes = (isAuthenticated, isAdmin) => {
         <Route path="/create" element={<CreateProjectPage />} />
         <Route path="/show" element={<ShowProjectPage />} />
         {isAdmin && <Route path="/admin" element={<AdminPanelPage />} />}
-        <Route path="*" element={<MainPage />} />
+        <Route path="*" element={<CreateProjectPage />} />
       </Routes>
     );
   }

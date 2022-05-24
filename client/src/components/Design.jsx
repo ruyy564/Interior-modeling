@@ -100,7 +100,7 @@ export default function Main() {
     });
   }
   return (
-    <>
+    <div className="create">
       <Canvas
         onPointerMissed={() => setTarget(null)}
         onCreated={({ gl, raycaster, scene }) => {
@@ -139,7 +139,7 @@ export default function Main() {
       <button onClick={() => handleExport(scene)}>Export ELTF</button>
       <button onClick={loadFromFile}>Add wall</button>
       <input type="file" ref={file} onChange={handleLoad.bind(null, file)} />
-    </>
+    </div>
   );
 }
 

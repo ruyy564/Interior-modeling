@@ -21,6 +21,7 @@
         "recoil": "^0.7.2",
         "three": "0.139.2"
     },
+    "proxy":"http://localhost:5000",
     "husky": {
         "hooks": {
             "commit-msg": "commitlint -E HUSKY_GIT_PARAMS -g ../config/git/commitlint.js"
