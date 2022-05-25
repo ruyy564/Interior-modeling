@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 export const useHttp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { token } = JSON.parse(localStorage.getItem('userData'));
 
   const request = useCallback(
     async (url, method = 'GET', body = null, headers = {}) => {
@@ -12,6 +13,9 @@ export const useHttp = () => {
           body = JSON.stringify(body);
           headers['Content-Type'] = 'application/json';
         }
+
+        headers['Authorization'] = `Bearer ${token}`;
+
         const response = await fetch(url, { method, body, headers });
         const data = await response.json();
 
