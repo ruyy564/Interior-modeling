@@ -1,46 +1,15 @@
-import React, { useRef, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { NavLink } from 'react-router-dom';
-import Button from '../components/Common/Button';
+import React, { useRef } from 'react';
+import { BurgerMenu } from '../components/BurgerMenu';
 import Design from '../components/Design';
 import image from '../assets/grass.jpg';
 import './main.css';
 import './authPage.css';
 
 export default function CreateProjectPage() {
-  const { logout } = useContext(AuthContext);
-  const burger = useRef();
   const menu = useRef();
-
   return (
     <div className="main-page">
-      <header>
-        <nav className="nav">
-          <div
-            className="burger"
-            onClick={(e) => {
-              e.target.classList.toggle('open');
-            }}
-          ></div>
-          <div className="circle"></div>
-          <ul className="menu">
-            <li>
-              <NavLink to="/create">Создать проект</NavLink>
-            </li>
-            <li>
-              <NavLink to="/main">Мои проекты</NavLink>
-            </li>
-            <li>
-              <NavLink to="/main">Библиотека</NavLink>
-            </li>
-            <li>
-              <a href="/" onClick={logout}>
-                Выйти
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </header>
+      <BurgerMenu />
       <section className="content-wrapper">
         <div ref={menu} className="content-menu">
           <ul className="sub-menu">
