@@ -18,13 +18,13 @@ export default function RegForm({ authHandler }) {
   const formHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   const registerHandler = async (e) => {
-    console.log('error1', error);
     try {
       const data = await request('/api/auth/registration', 'POST', { ...form });
-      console.log('data', data);
     } catch (e) {}
   };
+
   return (
     <>
       <Form>

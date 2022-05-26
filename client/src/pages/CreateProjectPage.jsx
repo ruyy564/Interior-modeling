@@ -1,66 +1,48 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import { useDesign } from '../hooks/design.hook';
 import { BurgerMenu } from '../components/BurgerMenu';
+import { DesignPanel } from '../components/DesignPanel';
+import { DesignMenu } from '../components/DesignMenu';
 import Design from '../components/Design';
-import image from '../assets/grass.jpg';
 import './main.css';
 import './authPage.css';
 
 export default function CreateProjectPage() {
-  const menu = useRef();
+  const {
+    setScene,
+    refControls,
+    target,
+    mode,
+    scene,
+    texture,
+    handleExport,
+    loadFromFile,
+    handleLoad,
+    setTarget,
+  } = useDesign();
+
   return (
     <div className="main-page">
       <BurgerMenu />
       <section className="content-wrapper">
-        <div ref={menu} className="content-menu">
-          <ul className="sub-menu">
-            <li>
-              <a href="">Конструкции</a>
-            </li>
-            <li>
-              <a href="">Мебель</a>
-            </li>
-            <li>
-              <a href="">Дектор</a>
-            </li>
-            <li>
-              <a href="">Текстуры</a>
-            </li>
-          </ul>
-          <div className="content">
-            <a>Назад</a>
-            <div className="item">
-              <img src={image} alt="...упс" />
-              <span>Мой проект</span>
-              <span>Автор:keyren</span>
-            </div>
-          </div>
-        </div>
-        <div
-          className="line"
-          onClick={() => {
-            console.log(menu.current.classList);
-            menu.current.classList.toggle('open');
-          }}
-        ></div>
+        <DesignMenu />
         <h2>Создать проект</h2>
-        <div>
-          <ul className="sub-menu status">
-            <li>
-              <a href="#">Открыть проект из файла</a>
-            </li>
-            <li>
-              <a href="#">Добавить проект из файла</a>
-            </li>
-            <li>
-              <a href="#">Скачать</a>
-            </li>
-            <li>
-              <a href="#">Сохранить</a>
-            </li>
-          </ul>
-        </div>
+        <DesignPanel
+          scene={scene}
+          handleLoad={handleLoad}
+          loadFromFile={loadFromFile}
+          handleExport={handleExport}
+        />
         <div className="content">
-          <Design />
+          <Design
+            setScene={setScene}
+            refControls={refControls}
+            target={target}
+            scene={scene}
+            mode={mode}
+            texture={texture}
+            setTarget={setTarget}
+          />
         </div>
       </section>
     </div>
