@@ -1,29 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHttp } from '../hooks/http.hook';
-import Button from '../components/Common/Button';
-import image from '../assets/grass.jpg';
+import FileLoader from '../loaders/FileLoader';
+import { statusEnum } from '../enums/statusEnum';
+import { typeEnum } from '../enums/typeEnum';
 import './main.css';
 import './authPage.css';
-
-const statusEnum = {
-  PRIVATE: 'Приватный',
-  PUBLIC: 'Публичный',
-  CHECK: 'На проверке',
-  REJECTED: 'Отклонено',
-};
-
-const typeEnum = {
-  PROJECT: 'Проект',
-  TEXTURE: 'Текстура',
-  CATALOG: 'Каталог',
-};
 
 export default function MainPage() {
   const [type, setType] = useState(null);
   const [item, setItem] = useState(null);
-  const [filtered, setFilterd] = useState(null);
+  const [filtered, setFilterd] = useState({
+    item: [],
+    status: null,
+    type: null,
+  });
   const [status, setStatus] = useState(null);
-  const { loading, error, request, clearError } = useHttp();
+  const { request } = useHttp();
+
   const burger = useRef();
   const menu = useRef();
 
@@ -37,18 +30,6 @@ export default function MainPage() {
     setType(data.types);
   };
 
-  const filterByStatus = (id) => {
-    setFilterd(() => {
-      return item.filter((el) => el.status === id);
-    });
-  };
-
-  const filterByType = (id) => {
-    setFilterd(() => {
-      return item.filter((el) => el.type === id);
-    });
-  };
-
   const getData = async () => {
     const { userId } = JSON.parse(localStorage.getItem('userData'));
     const data = await request(`api/design/databyuser/${userId}`, 'GET');
@@ -57,15 +38,21 @@ export default function MainPage() {
     setFilterd(data.projects);
   };
 
+  const publish = async (id) => {
+    await request(`api/design/publish/${id}`, 'PUT');
+
+    getData();
+  };
+
+  const download = async (id) => {
+    const data = await request(`api/design/data/${id}`, 'GET');
+
+    FileLoader.saveString(data.value, `${2}.gltf`);
+  };
+
   const deleteData = (id) => {
-    setItem((prev) => {
-      return prev.filter((el) => el._id !== id);
-    });
-
-    setFilterd((prev) => {
-      return prev.filter((el) => el._id !== id);
-    });
-
+    setItem(item.filter((el) => el._id !== id));
+    filterData(filtered.type, filtered.status);
     request(`api/design/data/${id}`, 'DELETE');
   };
 
@@ -75,13 +62,47 @@ export default function MainPage() {
     getData();
   }, []);
 
+  const filterByType = (id) => {
+    filterData(id, filtered.status);
+  };
+
+  const filterData = (typeId, statusId) => {
+    const filterData = item.filter(
+      (elem) => elem.type === typeId && elem.status === statusId
+    );
+
+    setFilterd((prev) => ({
+      item: filterData,
+      type: typeId,
+      status: statusId,
+    }));
+  };
+
+  const filterByStatus = (id) => {
+    filterData(filtered.type, id);
+  };
+
   useEffect(() => {
     if (item !== null && status !== null && type !== null) {
-      filterByType(type[0]._id);
-      filterByStatus(status[0]._id);
+      console.log(filtered.item);
+      if (!filtered.item) filterData(type[0]._id, status[0]._id);
+      else filterData(filtered.type, filtered.status);
     }
   }, [status, item, type]);
 
+  const findByidType = (id) => {
+    if (!type) return '';
+    if (!id) return '';
+
+    return typeEnum[type.filter((el) => el._id == id)[0].name];
+  };
+
+  const findByidStatus = (id) => {
+    if (!status) return '';
+    if (!id) return '';
+
+    return statusEnum[status.filter((el) => el._id == id)[0].name];
+  };
   return (
     <div className="main-page">
       <header>
@@ -136,7 +157,11 @@ export default function MainPage() {
             menu.current.classList.toggle('open');
           }}
         ></div>
-        <h2>Проекты</h2>
+        <h2>
+          {findByidType(filtered.type) +
+            ' | ' +
+            findByidStatus(filtered.status)}
+        </h2>
         <div>
           <ul className="sub-menu status">
             {status &&
@@ -152,22 +177,14 @@ export default function MainPage() {
                   </a>
                 </li>
               ))}
-            {/*             
-            <li>
-              <a href="#">На проверке</a>
-            </li>
-            <li>
-              <a href="#">Публичные</a>
-            </li> */}
           </ul>
         </div>
         <div className="content">
-          {filtered &&
-            filtered.map((el) => (
+          {filtered.item &&
+            filtered.item.map((el) => (
               <div key={el._id} className="item">
                 <img src={el.image} alt="...упс" />
                 <span>{el.name}</span>
-                {/* <span>Автор:keyren</span> */}
                 <div className="item-back">
                   <ul className="sub-menu">
                     <li>
@@ -177,10 +194,24 @@ export default function MainPage() {
                       <a href="#">Редактировать</a>
                     </li>
                     <li>
-                      <a href="#">Загрузить</a>
+                      <a
+                        href="#"
+                        onClick={() => {
+                          download(el._id);
+                        }}
+                      >
+                        Загрузить
+                      </a>
                     </li>
                     <li>
-                      <a href="#">Опубликовать</a>
+                      <a
+                        href="#"
+                        onClick={() => {
+                          publish(el._id);
+                        }}
+                      >
+                        Опубликовать
+                      </a>
                     </li>
                     <li>
                       <a
