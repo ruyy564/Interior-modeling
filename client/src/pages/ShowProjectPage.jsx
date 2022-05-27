@@ -1,8 +1,8 @@
-import React, { useSearchParams } from 'react';
-
+import React from 'react';
+import { useParams } from 'react-router-dom';
 export default function ShowProjectPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  // console.log(searchParams.get('id'));
+  const { id } = useParams();
+
   return (
     <div>
       <h2>ShowProjectPage</h2>

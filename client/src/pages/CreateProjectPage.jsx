@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDesign } from '../hooks/design.hook';
 import { BurgerMenu } from '../components/BurgerMenu';
 import { DesignPanel } from '../components/DesignPanel';
@@ -8,6 +9,7 @@ import './main.css';
 import './authPage.css';
 
 export default function CreateProjectPage() {
+  const { id } = useParams();
   const {
     setScene,
     refControls,
@@ -19,7 +21,16 @@ export default function CreateProjectPage() {
     loadFromFile,
     handleLoad,
     setTarget,
+    handleLoadFullScene,
+    loadSceneById,
+    saveScene,
   } = useDesign();
+
+  useEffect(() => {
+    if (id) {
+      loadSceneById(id);
+    }
+  }, [id]);
 
   return (
     <div className="main-page">
@@ -32,6 +43,8 @@ export default function CreateProjectPage() {
           handleLoad={handleLoad}
           loadFromFile={loadFromFile}
           handleExport={handleExport}
+          handleLoadFullScene={handleLoadFullScene}
+          saveScene={saveScene}
         />
         <div className="content">
           <Design

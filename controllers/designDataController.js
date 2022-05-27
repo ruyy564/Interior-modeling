@@ -60,8 +60,8 @@ class designDataController {
 
       res.status(200).json({
         message: 'Проект  загружен',
-        image: contentProject,
-        value: contentImage,
+        image: contentImage,
+        value: contentProject,
         project,
       });
     } catch (e) {
@@ -93,6 +93,80 @@ class designDataController {
       res.status(201).json({ message: 'Проект удален' });
     } catch (e) {
       res.status(400).json({ message: 'Проект не удален', error: e });
+      console.log(e);
+    }
+  }
+  async accept(req, res) {
+    try {
+      const projectId = req.params.id;
+      const status = await StatusData.findOne({ name: 'PUBLIC' });
+      const project = await DesignData.findOneAndUpdate(
+        {
+          _id: projectId,
+        },
+        {
+          $set: {
+            status: status._id,
+          },
+        }
+      );
+
+      if (!project) {
+        return res.status(400).json({ message: 'Проекта не существует' });
+      }
+      res.status(201).json({ message: 'Проект изменен' });
+    } catch (e) {
+      res.status(400).json({ message: 'Проект не изменен', error: e });
+      console.log(e);
+    }
+  }
+
+  async cancel(req, res) {
+    try {
+      const projectId = req.params.id;
+      const status = await StatusData.findOne({ name: 'REJECTED' });
+      const project = await DesignData.findOneAndUpdate(
+        {
+          _id: projectId,
+        },
+        {
+          $set: {
+            status: status._id,
+          },
+        }
+      );
+
+      if (!project) {
+        return res.status(400).json({ message: 'Проекта не существует' });
+      }
+      res.status(201).json({ message: 'Проект изменен' });
+    } catch (e) {
+      res.status(400).json({ message: 'Проект не изменен', error: e });
+      console.log(e);
+    }
+  }
+
+  async publish(req, res) {
+    try {
+      const projectId = req.params.id;
+      const status = await StatusData.findOne({ name: 'CHECK' });
+      const project = await DesignData.findOneAndUpdate(
+        {
+          _id: projectId,
+        },
+        {
+          $set: {
+            status: status._id,
+          },
+        }
+      );
+
+      if (!project) {
+        return res.status(400).json({ message: 'Проекта не существует' });
+      }
+      res.status(201).json({ message: 'Проект изменен' });
+    } catch (e) {
+      res.status(400).json({ message: 'Проект не изменен', error: e });
       console.log(e);
     }
   }
@@ -153,8 +227,20 @@ class designDataController {
   async getDataByUserId(req, res) {
     try {
       const userId = req.params.id;
-      const projects = await DesignData.find({
+      let projects = await DesignData.find({
         user: userId,
+      });
+
+      projects = projects.map((project) => {
+        const image = project.image ? project.id : config.defaultImage;
+        const contentImage = fs.readFileSync(
+          config.pathToImage + image + config.ext,
+          'utf8'
+        );
+        const newProject = JSON.parse(JSON.stringify(project));
+        newProject.image = contentImage;
+
+        return newProject;
       });
 
       res.status(201).json({ projects });

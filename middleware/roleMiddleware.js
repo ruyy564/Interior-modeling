@@ -24,7 +24,7 @@ module.exports = (accessRoles) => {
       next();
     } catch (e) {
       console.log(e);
-      return res.status(400).json({ message: 'Пользователь не авторизован' });
+      return res.status(400).json({ message: e.name, error: e });
     }
   };
 };

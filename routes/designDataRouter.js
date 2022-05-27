@@ -40,11 +40,7 @@ router.get(
   //[roleMiddleware(['ADMIN'])],
   designDataController.downloadData
 );
-router.post(
-  '/data',
-  [roleMiddleware(['ADMIN'])],
-  designDataController.saveData
-);
+router.post('/data', [roleMiddleware(['USER'])], designDataController.saveData);
 
 router.put(
   '/data/:id',
@@ -54,8 +50,26 @@ router.put(
 
 router.delete(
   '/data/:id',
-  //[roleMiddleware(['ADMIN'])],
+  [roleMiddleware(['USER'])],
   designDataController.deleteData
+);
+
+router.put(
+  '/publish/:id',
+  [roleMiddleware(['USER'])],
+  designDataController.publish
+);
+
+router.put(
+  '/cancel/:id',
+  [roleMiddleware(['USER'])],
+  designDataController.cancel
+);
+
+router.put(
+  '/accept/:id',
+  [roleMiddleware(['USER'])],
+  designDataController.accept
 );
 
 module.exports = router;

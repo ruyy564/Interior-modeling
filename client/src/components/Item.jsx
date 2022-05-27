@@ -1,4 +1,6 @@
-export const Item = ({ el, download, publish, deleteData }) => {
+import { NavLink } from 'react-router-dom';
+
+export const Item = ({ el, download, publish, deleteData, reject }) => {
   return (
     <div key={el._id} className="item">
       <img src={el.image} alt="...упс" />
@@ -6,7 +8,7 @@ export const Item = ({ el, download, publish, deleteData }) => {
       <div className="item-back">
         <ul className="sub-menu">
           <li>
-            <a href="#">Открыть</a>
+            <NavLink to={`/create${el._id}`}>Открыть</NavLink>
           </li>
           <li>
             <a href="#">Редактировать</a>
@@ -29,6 +31,17 @@ export const Item = ({ el, download, publish, deleteData }) => {
               }}
             >
               Опубликовать
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              onClick={() => {
+                console.log('jgh');
+                reject(el._id);
+              }}
+            >
+              Отменить
             </a>
           </li>
           <li>

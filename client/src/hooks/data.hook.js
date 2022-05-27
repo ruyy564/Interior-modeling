@@ -39,6 +39,18 @@ export const useData = () => {
     getData();
   };
 
+  const rejected = async (id) => {
+    await request(`api/design/cancel/${id}`, 'PUT');
+
+    getData();
+  };
+
+  const accept = async (id) => {
+    await request(`api/design/accept/${id}`, 'PUT');
+
+    getData();
+  };
+
   const download = async (id) => {
     const data = await request(`api/design/data/${id}`, 'GET');
 
@@ -102,5 +114,7 @@ export const useData = () => {
     download,
     publish,
     deleteData,
+    rejected,
+    accept,
   };
 };

@@ -10,12 +10,14 @@ class authController {
     try {
       const errors = validationResult(req);
 
+      console.log('req.body', req.body);
       if (!errors.isEmpty()) {
         return res.status(400).json({
           errors: errors.array(),
           message: 'Некорректные данные при регистрации',
         });
       }
+
       const { email, password, nickname } = req.body;
       const candidate = await User.findOne({ email });
 
@@ -23,7 +25,7 @@ class authController {
         return res.status(400).json({ message: 'Пользователь уже существует' });
       }
       const hashPassword = await bcrypt.hash(password, 12);
-      const { id } = await UserRole.findOne({ name: 'ADMIN' });
+      const { id } = await UserRole.findOne({ name: 'USER' });
       const user = new User({
         email,
         nickname,
@@ -68,7 +70,7 @@ class authController {
         { userId: user.id, role: user.role },
         config.secret,
         {
-          expiresIn: '12h',
+          expiresIn: '5h',
         }
       );
 

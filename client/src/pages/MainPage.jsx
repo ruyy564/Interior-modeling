@@ -4,6 +4,7 @@ import { BurgerMenu } from '../components/BurgerMenu';
 import { Item } from '../components/Item';
 import { SubMenu } from '../components/SubMenu';
 import { StatusMenu } from '../components/StatusMenu';
+import { statusEnum } from '../enums/statusEnum';
 import './main.css';
 
 export default function MainPage() {
@@ -18,6 +19,8 @@ export default function MainPage() {
     download,
     publish,
     deleteData,
+    rejected,
+    accept,
   } = useData();
 
   return (
@@ -32,13 +35,40 @@ export default function MainPage() {
         </h2>
         <StatusMenu status={status} filterByStatus={filterByStatus} />
         <div className="content">
+          <div className="change-modal">
+            <h1>Изменить</h1>
+            <input type="text" />
+            <input type="file" />
+            <button>Подтвердить</button>
+            <button>Отменить</button>
+          </div>
           {filtered.item &&
             filtered.item.map((el) => (
               <Item
                 key={el._id}
                 el={el}
                 download={download}
-                publish={publish}
+                publish={() => {
+                  switch (findByidStatus(filtered.status)) {
+                    case 'Приватный':
+                      publish(el._id);
+                      console.log('PRIVATE');
+                      break;
+                    case 'На проверке':
+                      accept(el._id);
+                      console.log('CHECK');
+                      break;
+                  }
+                }}
+                reject={() => {
+                  console.log(findByidStatus(filtered.status));
+                  switch (findByidStatus(filtered.status)) {
+                    case 'На проверке':
+                      console.log('kjkhkj');
+                      rejected(el._id);
+                      break;
+                  }
+                }}
                 deleteData={deleteData}
               />
             ))}

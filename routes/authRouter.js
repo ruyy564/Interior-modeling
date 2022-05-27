@@ -11,7 +11,7 @@ router.post(
   [
     check('email', 'Некорректный email').isEmail(),
     check('password', 'Мин длина пароля 6 символов').isLength({ min: 6 }),
-    check('nickname', 'Введите nickname').exists(),
+    check('nickname', 'Введите nickname').isLength({ min: 1 }),
   ],
   authController.registration
 );
