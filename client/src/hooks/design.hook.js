@@ -73,7 +73,7 @@ export const useDesign = () => {
       console.log(e);
     }
   });
-  const ImageLoader = async (elm) => {
+  const imageLoader = async (elm) => {
     if (elm.files) {
       const fileReader = new FileReader();
       fileReader.onload = function (fileLoadedEvent) {
@@ -170,5 +170,6 @@ export const useDesign = () => {
     setTarget,
     loadSceneById,
     saveScene,
+    imageLoader,
   };
 };

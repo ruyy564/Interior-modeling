@@ -1,6 +1,14 @@
 import { NavLink } from 'react-router-dom';
 
-export const Item = ({ el, download, publish, deleteData, reject }) => {
+export const Item = ({
+  el,
+  download,
+  publish,
+  deleteData,
+  reject,
+  openModal,
+  setIdModal,
+}) => {
   return (
     <div key={el._id} className="item">
       <img src={el.image} alt="...упс" />
@@ -11,7 +19,15 @@ export const Item = ({ el, download, publish, deleteData, reject }) => {
             <NavLink to={`/create${el._id}`}>Открыть</NavLink>
           </li>
           <li>
-            <a href="#">Редактировать</a>
+            <a
+              href="#"
+              onClick={() => {
+                openModal(true);
+                setIdModal();
+              }}
+            >
+              Редактировать
+            </a>
           </li>
           <li>
             <a

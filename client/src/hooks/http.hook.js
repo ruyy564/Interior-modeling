@@ -5,10 +5,12 @@ export const useHttp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { logout } = useAuth();
+  const clearError = () => {
+    setError(null);
+  };
   const request = useCallback(
     async (url, method = 'GET', body = null, headers = {}) => {
       const user = JSON.parse(localStorage.getItem('userData'));
-
       //const decodeData = verify(user?.token, 'config.secret');
       setLoading(true);
       try {
@@ -40,8 +42,5 @@ export const useHttp = () => {
     }
   );
 
-  const clearError = () => {
-    setError(null);
-  };
   return { loading, request, error, clearError };
 };

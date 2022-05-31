@@ -174,26 +174,54 @@ class designDataController {
   async updateData(req, res) {
     try {
       const projectId = req.params.id;
-      const { model, name, type, image = null } = req.body;
+      const { model = null, name, image = null, type = null } = req.body;
       const data = JSON.stringify(model);
 
-      if (!model || !name || !type) {
+      if (!name) {
         return res.status(400).json({ message: 'Неверные данные' });
       }
       const haveImage = image !== null;
-      const project = await DesignData.findOneAndUpdate(
-        {
-          _id: projectId,
-        },
-        {
-          $set: {
-            name,
-            type,
-            image: haveImage,
-          },
-        }
-      );
+      let project;
 
+      if (model !== null) {
+        project = await DesignData.findOneAndUpdate(
+          {
+            _id: projectId,
+          },
+          {
+            $set: {
+              name,
+              model,
+              image: haveImage,
+            },
+          }
+        );
+      } else {
+        project = await DesignData.findOneAndUpdate(
+          {
+            _id: projectId,
+          },
+          {
+            $set: {
+              name,
+              image: haveImage,
+            },
+          }
+        );
+      }
+
+      if (type !== null) {
+        project = await DesignData.findOneAndUpdate(
+          {
+            _id: projectId,
+          },
+          {
+            $set: {
+              type,
+            },
+          }
+        );
+      }
       if (!project) {
         return res.status(400).json({ message: 'Проекта не существует' });
       }
