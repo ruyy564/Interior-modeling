@@ -252,7 +252,7 @@ ul {
     overflow: hidden;
     transition: all 0.9s;
 
-    border-bottom: 3px solid rgb(255, 0, 136, 0.15);
+    /* border-bottom: 3px solid rgb(255, 0, 136, 0.15); */
     background-color: #7a7a7a2e;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 40px rgb(8 7 16/60%);

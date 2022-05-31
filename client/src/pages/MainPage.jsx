@@ -1,16 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { useData } from '../hooks/data.hook';
+import { useModal } from '../hooks/modal.hook';
 import { BurgerMenu } from '../components/BurgerMenu';
 import { Item } from '../components/Item';
 import { SubMenu } from '../components/SubMenu';
 import { StatusMenu } from '../components/StatusMenu';
-import { Modal } from '../components/Modal';
-import Input from '../components/Common/Input';
 import Button from '../components/Common/Button';
-import Group from '../components/Common/Group';
-import { statusEnum } from '../enums/statusEnum';
-import { useDesign } from '../hooks/design.hook';
-import { useHttp } from '../hooks/http.hook';
+import { ModalChange } from '../components/ModalChange';
 import './main.css';
 
 export default function MainPage() {
@@ -29,35 +25,16 @@ export default function MainPage() {
     accept,
   } = useData();
 
-  const { request, loading, error } = useHttp();
-  const [modalActive, setModalActive] = useState(false);
-  const [form, setForm] = useState({ name: '', image: null, id: null });
-
-  const changeName = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const changeImage = (elm) => {
-    if (elm.files) {
-      const fileReader = new FileReader();
-
-      fileReader.onload = function (fileLoadedEvent) {
-        const srcData = fileLoadedEvent.target.result;
-
-        setForm({ ...form, image: srcData });
-      };
-      fileReader.readAsDataURL(elm.files[0]);
-    }
-  };
-
-  const formHandler = useCallback(async () => {
-    const data = await request(`api/design/data/${form.id}`, 'PUT', {
-      ...form,
-    });
-
-    setModalActive(false);
-  });
-
+  const {
+    modalActive,
+    setModalActive,
+    error,
+    changeName,
+    formHandler,
+    changeImage,
+    setForm,
+    form,
+  } = useModal();
   return (
     <div className="main-page">
       <BurgerMenu />
@@ -115,31 +92,14 @@ export default function MainPage() {
             ))}
         </div>
       </section>
-      <Modal active={modalActive} setActive={setModalActive}>
-        <Group>
-          <span>{error}</span>
-          <Input
-            type={'text'}
-            placeholder={'Введите название проекта'}
-            name={'name'}
-            formHandler={changeName}
-          />
-          <span>Загрузите изображение</span>
-          <input type={'file'} onChange={(e) => changeImage(e.target)} />
-        </Group>
-        <Group>
-          <Button
-            className={'log'}
-            value={'Подтвердить'}
-            onClick={formHandler}
-          />
-          <Button
-            className={'log'}
-            value={'Отменить'}
-            onClick={() => setModalActive(false)}
-          />
-        </Group>
-      </Modal>
+      <ModalChange
+        modalActive={modalActive}
+        setModalActive={setModalActive}
+        error={error}
+        changeName={changeName}
+        formHandler={formHandler}
+        changeImage={changeImage}
+      />
     </div>
   );
 }
