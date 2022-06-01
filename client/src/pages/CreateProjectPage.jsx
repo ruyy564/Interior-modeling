@@ -5,6 +5,7 @@ import { BurgerMenu } from '../components/BurgerMenu';
 import { DesignPanel } from '../components/DesignPanel';
 import { DesignMenu } from '../components/DesignMenu';
 import { ModalSave } from '../components/ModalSave';
+import { useData } from '../hooks/catalog.hook';
 import Design from '../components/Design';
 import './main.css';
 import './authPage.css';
@@ -26,8 +27,11 @@ export default function CreateProjectPage() {
     changeScene,
     handleLoadFullScene,
     loadSceneById,
+    loadObjectById,
     saveScene,
   } = useDesign();
+
+  const { type, filtered, filterByType, findByidType, download } = useData();
 
   useEffect(() => {
     if (id) {
@@ -42,7 +46,14 @@ export default function CreateProjectPage() {
     <div className="main-page">
       <BurgerMenu />
       <section className="content-wrapper">
-        <DesignMenu />
+        <DesignMenu
+          filtered={filtered}
+          findByidType={findByidType}
+          type={type}
+          filterByType={filterByType}
+          download={loadObjectById}
+        />
+
         <h2>Создать проект</h2>
         <DesignPanel
           id={id}

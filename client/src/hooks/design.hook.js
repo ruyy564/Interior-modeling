@@ -69,6 +69,35 @@ export const useDesign = () => {
       console.log(e);
     }
   });
+
+  const loadObjectById = useCallback(async (id) => {
+    try {
+      const { value } = await request(`api/design/data/${id}`, 'GET');
+
+      new Response(value).json().then(
+        (json) => {
+          var loader = new MyLoader();
+          loader.parse(json, function (gltf) {
+            console.log('ghj', gltf);
+            let ob = {
+              ...scene,
+              children: [...scene.children, ...gltf.scene.children],
+            };
+            const newScene = new Scene();
+            ob.__proto__ = newScene;
+            setScene(ob);
+            setTarget(null);
+          });
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
   const imageLoader = async (elm) => {
     if (elm.files) {
       const fileReader = new FileReader();
@@ -141,7 +170,7 @@ export const useDesign = () => {
   };
 
   function loadFromFile() {
-    new GLTFLoader().load('Flower.txt', function (gltf) {
+    new GLTFLoader().load('wall.txt', function (gltf) {
       let ob = {
         ...scene,
         children: [...scene.children, ...gltf.scene.children],
@@ -169,5 +198,6 @@ export const useDesign = () => {
     saveScene,
     changeScene,
     imageLoader,
+    loadObjectById,
   };
 };

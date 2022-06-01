@@ -73,9 +73,20 @@ export const useData = () => {
     filterData(id, filtered.status);
   };
 
+  const checkChildern = (typeId, parent) => {
+    const children = type.filter((el) => el.parent === parent);
+    let result = false;
+
+    children.forEach((el) => {
+      if (el._id === typeId) result = true;
+    });
+    return result;
+  };
   const filterData = (typeId, statusId) => {
     const filterData = item.filter(
-      (elem) => elem.type === typeId && elem.status === statusId
+      (elem) =>
+        (elem.type === typeId || checkChildern(elem.type, typeId)) &&
+        elem.status === statusId
     );
 
     setFilterd((prev) => ({
@@ -97,7 +108,6 @@ export const useData = () => {
   }, [status, item, type]);
 
   const findByidType = (id) => {
-    console.log(id, 'dgjghj');
     return typeEnum[type.filter((el) => el._id == id)[0].name];
   };
 

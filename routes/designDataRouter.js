@@ -36,6 +36,12 @@ router.get(
 );
 
 router.get(
+  '/catalogbyuser/:id',
+  //[roleMiddleware(['ADMIN'])],
+  designDataController.getDataCatalog
+);
+
+router.get(
   '/data/:id',
   //[roleMiddleware(['ADMIN'])],
   designDataController.downloadData

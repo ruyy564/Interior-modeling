@@ -56,10 +56,10 @@ export const ModalAdd = ({
     }
   };
 
-  const formHandler = async () => {
+  const formHandler = async (type = null) => {
     let data = await request(`api/design/data/`, 'POST', {
       ...form,
-      type: filtered.type,
+      type: type === null ? filtered.type : type,
     });
 
     setModalActive(false);
@@ -78,7 +78,6 @@ export const ModalAdd = ({
         <span>Загрузите изображение</span>
         <input type={'file'} onChange={(e) => changeImage(e.target)} />
         <span>Загрузите проект</span>
-        {type && console.log(type)}
 
         {filtered.type &&
           (findByidType(filtered.type) === 'Проект' ? (
@@ -120,9 +119,10 @@ export const ModalAdd = ({
           onClick={() => {
             if (selectType.current) {
               setForm({ ...form, type: selectType.current.value });
+              console.log('fort', form);
             }
 
-            formHandler();
+            formHandler(selectType.current.value);
           }}
         />
         <Button

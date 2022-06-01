@@ -20,6 +20,16 @@ export const DesignPanel = ({
           <input
             type="file"
             name="file"
+            id="open"
+            className="inputfile"
+            onChange={(e) => handleLoadFullScene(e.target)}
+          />
+          <label htmlFor="open">Открыть проект</label>
+        </li>
+        <li>
+          <input
+            type="file"
+            name="file"
             id="file"
             className="inputfile"
             onChange={(e) => handleLoad(e.target)}
@@ -32,16 +42,6 @@ export const DesignPanel = ({
           </a>
         </li>
 
-        <li>
-          <input
-            type="file"
-            name="file"
-            id="open"
-            className="inputfile"
-            onChange={(e) => handleLoadFullScene(e.target)}
-          />
-          <label htmlFor="open">Открыть проект</label>
-        </li>
         <li>
           <a href="#" onClick={() => handleExport(scene)}>
             Скачать

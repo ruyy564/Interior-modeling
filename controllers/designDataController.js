@@ -226,6 +226,48 @@ class designDataController {
     }
   }
 
+  async getDataCatalog(req, res) {
+    try {
+      const userId = req.params.id;
+      let projectsUser = await DesignData.find({
+        user: userId,
+      });
+      let status = await StatusData.find({ name: 'PUBLIC' });
+
+      let projects = await DesignData.find({
+        status: status._id,
+      });
+
+      projects = projects.map((project) => {
+        const image = project.image ? project.id : config.defaultImage;
+        const contentImage = fs.readFileSync(
+          config.pathToImage + image + config.ext,
+          'utf8'
+        );
+        const newProject = JSON.parse(JSON.stringify(project));
+        newProject.image = contentImage;
+
+        return newProject;
+      });
+      projectsUser = projectsUser.map((project) => {
+        const image = project.image ? project.id : config.defaultImage;
+        const contentImage = fs.readFileSync(
+          config.pathToImage + image + config.ext,
+          'utf8'
+        );
+        const newProject = JSON.parse(JSON.stringify(project));
+        newProject.image = contentImage;
+
+        return newProject;
+      });
+
+      res.status(201).json({ projects: [...projects, ...projectsUser] });
+    } catch (e) {
+      res.status(400).json({ message: 'Проект не существует', error: e });
+      console.log(e);
+    }
+  }
+
   async getDataByUserId(req, res) {
     try {
       const userId = req.params.id;
