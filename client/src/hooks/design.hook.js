@@ -11,7 +11,7 @@ import { TLoader } from '../loaders/TLoader';
 import FileLoader from '../loaders/FileLoader';
 
 export const useDesign = () => {
-  const { request } = useHttp();
+  const { request, error } = useHttp();
   const refControls = useRef();
   const [scene, setScene] = useState(null);
   const { target, setTarget } = useStore();
@@ -22,19 +22,21 @@ export const useDesign = () => {
 
   const saveScene = useCallback(async (body) => {
     const exporter = new GLTFExporter();
+    console.log('save-=', body);
     exporter.parse(scene, async function (gltf) {
-      request(`api/design/data/`, 'POST', {
-        name: 'my-project2',
+      await request(`api/design/data/`, 'POST', {
+        ...body,
         model: gltf,
       });
+      console.log('save-=1', body);
     });
+    console.log('save-=2', body);
   });
 
-  const changeScene = useCallback(async (id, body) => {
+  const changeScene = useCallback(async (id) => {
     const exporter = new GLTFExporter();
     exporter.parse(scene, async function (gltf) {
-      request(`api/design/data/${id}`, 'POST', {
-        name: 'my-project2',
+      request(`api/design/data/${id}`, 'PUT', {
         model: gltf,
       });
     });
@@ -152,6 +154,7 @@ export const useDesign = () => {
 
   return {
     setScene,
+    error,
     refControls,
     target,
     mode,
@@ -164,6 +167,7 @@ export const useDesign = () => {
     setTarget,
     loadSceneById,
     saveScene,
+    changeScene,
     imageLoader,
   };
 };

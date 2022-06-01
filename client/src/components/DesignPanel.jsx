@@ -7,6 +7,9 @@ export const DesignPanel = ({
   handleExport,
   handleLoadFullScene,
   saveScene,
+  changeScene,
+  setModalActive,
+  id,
 }) => {
   const file = useRef();
 
@@ -14,12 +17,14 @@ export const DesignPanel = ({
     <div>
       <ul className="sub-menu status">
         <li>
-          <span>Открыть проект из файла</span>
           <input
             type="file"
-            ref={file}
+            name="file"
+            id="file"
+            className="inputfile"
             onChange={(e) => handleLoad(e.target)}
           />
+          <label htmlFor="file">Добавить в проект</label>
         </li>
         <li>
           <a href="#" onClick={loadFromFile}>
@@ -28,13 +33,14 @@ export const DesignPanel = ({
         </li>
 
         <li>
-          <span>Добавить проект из файла</span>
           <input
             type="file"
-            onChange={(e) => {
-              handleLoadFullScene(e.target);
-            }}
+            name="file"
+            id="open"
+            className="inputfile"
+            onChange={(e) => handleLoadFullScene(e.target)}
           />
+          <label htmlFor="open">Открыть проект</label>
         </li>
         <li>
           <a href="#" onClick={() => handleExport(scene)}>
@@ -42,18 +48,15 @@ export const DesignPanel = ({
           </a>
         </li>
         <li>
-          <a
-            href="#"
-            onClick={() =>
-              saveScene({
-                name: 'my-project2',
-                type: '62864fd72eff904c106cf445',
-                model: 'scene',
-              })
-            }
-          >
-            Сохранить
-          </a>
+          {id ? (
+            <a href="#" onClick={() => changeScene(id)}>
+              Сохранить изменения
+            </a>
+          ) : (
+            <a href="#" onClick={() => setModalActive(true)}>
+              Сохранить
+            </a>
+          )}
         </li>
       </ul>
     </div>

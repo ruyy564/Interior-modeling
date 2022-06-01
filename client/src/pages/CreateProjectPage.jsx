@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDesign } from '../hooks/design.hook';
 import { BurgerMenu } from '../components/BurgerMenu';
 import { DesignPanel } from '../components/DesignPanel';
 import { DesignMenu } from '../components/DesignMenu';
+import { ModalSave } from '../components/ModalSave';
 import Design from '../components/Design';
 import './main.css';
 import './authPage.css';
@@ -17,10 +18,12 @@ export default function CreateProjectPage() {
     mode,
     scene,
     texture,
+    error,
     handleExport,
     loadFromFile,
     handleLoad,
     setTarget,
+    changeScene,
     handleLoadFullScene,
     loadSceneById,
     saveScene,
@@ -32,6 +35,9 @@ export default function CreateProjectPage() {
     }
   }, [id]);
 
+  const [modalActive, setModalActive] = useState(false);
+  const [form, setForm] = useState({ name: '', image: null });
+
   return (
     <div className="main-page">
       <BurgerMenu />
@@ -39,12 +45,14 @@ export default function CreateProjectPage() {
         <DesignMenu />
         <h2>Создать проект</h2>
         <DesignPanel
+          id={id}
           scene={scene}
           handleLoad={handleLoad}
           loadFromFile={loadFromFile}
           handleExport={handleExport}
           handleLoadFullScene={handleLoadFullScene}
-          saveScene={saveScene}
+          changeScene={changeScene}
+          setModalActive={setModalActive}
         />
         <div className="content">
           <Design
@@ -58,6 +66,14 @@ export default function CreateProjectPage() {
           />
         </div>
       </section>
+      <ModalSave
+        form={form}
+        setForm={setForm}
+        modalActive={modalActive}
+        setModalActive={setModalActive}
+        saveScene={saveScene}
+        error={error}
+      />
     </div>
   );
 }

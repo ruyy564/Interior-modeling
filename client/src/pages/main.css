@@ -412,3 +412,23 @@ section {
     display: flex;
     align-items: center;
 }
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile+label {
+    position: static;
+    display: inline-block;
+}
+
+.inputfile:focus+label,
+.inputfile+label:hover {
+    cursor: pointer;
+    color: rgb(93, 92, 92);
+}
