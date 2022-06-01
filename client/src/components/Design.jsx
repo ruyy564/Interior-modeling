@@ -13,7 +13,6 @@ export default function Design({
   target,
   mode,
   scene,
-  texture,
   setTarget,
 }) {
   return (
@@ -46,7 +45,6 @@ export default function Design({
                   object={element}
                   camera={refControls}
                   key={element.uuid}
-                  texture={texture}
                 />
               );
             })}

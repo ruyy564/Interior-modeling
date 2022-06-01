@@ -8,6 +8,7 @@ export const DesignMenu = ({
   type,
   filterByType,
   download,
+  loadTextureById,
 }) => {
   const menu = useRef();
 
@@ -34,14 +35,17 @@ export const DesignMenu = ({
               ))}
         </ul>
         <div className="content">
-          {/* <a>Назад</a> */}
           {filtered.item &&
             filtered.item.map((el) => (
               <div
                 key={el._id}
                 className="item small"
                 onClick={() => {
-                  download(el._id);
+                  if (findByidType(filtered.type) === 'Текстура') {
+                    loadTextureById(el._id);
+                  } else {
+                    download(el._id);
+                  }
                 }}
               >
                 <img src={el.image} alt="...упс" />

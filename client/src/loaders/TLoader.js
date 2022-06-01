@@ -9,20 +9,18 @@ class TLoader extends Loader {
 
   load(url, onLoad, onProgress, onError) {
     const texture = new Texture();
-
     const loader = new ImageLoader(this.manager);
     loader.setCrossOrigin(this.crossOrigin);
     loader.setPath(this.path);
-
     loader.load(
       url,
       function (image) {
-        console.log(image);
         texture.image = image;
         texture.needsUpdate = true;
-
+        console.log('loader', texture);
         if (onLoad !== undefined) {
           onLoad(texture);
+          console.log('loader', texture.source.data);
         }
       },
       onProgress,

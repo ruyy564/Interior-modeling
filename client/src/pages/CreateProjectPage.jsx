@@ -18,7 +18,6 @@ export default function CreateProjectPage() {
     target,
     mode,
     scene,
-    texture,
     error,
     handleExport,
     loadFromFile,
@@ -28,6 +27,7 @@ export default function CreateProjectPage() {
     handleLoadFullScene,
     loadSceneById,
     loadObjectById,
+    loadTextureById,
     saveScene,
     deleteObject,
   } = useDesign();
@@ -53,6 +53,7 @@ export default function CreateProjectPage() {
           type={type}
           filterByType={filterByType}
           download={loadObjectById}
+          loadTextureById={loadTextureById}
         />
 
         <h2>Создать проект</h2>
@@ -75,7 +76,6 @@ export default function CreateProjectPage() {
             target={target}
             scene={scene}
             mode={mode}
-            texture={texture}
             setTarget={setTarget}
           />
         </div>

@@ -1,6 +1,6 @@
 import { useStore } from '../hooks/store.hook';
-
-export const Model = ({ object, camera, texture }) => {
+import { Texture } from 'three/src/textures/Texture.js';
+export const Model = ({ object, camera }) => {
   const setTarget = useStore((state) => state.setTarget);
 
   const blockOrtoginationControll = (e) => {
@@ -15,7 +15,9 @@ export const Model = ({ object, camera, texture }) => {
     camera.current.enableRotate = true;
   };
 
-  object.material.map = texture;
+  // object.material.map = object.material.map
+  //   ? object.material.map
+  //   : new Texture();
 
   return (
     <primitive

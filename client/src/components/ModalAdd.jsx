@@ -119,10 +119,10 @@ export const ModalAdd = ({
           onClick={() => {
             if (selectType.current) {
               setForm({ ...form, type: selectType.current.value });
-              console.log('fort', form);
+              formHandler(selectType.current.value);
+            } else {
+              formHandler();
             }
-
-            formHandler(selectType.current.value);
           }}
         />
         <Button

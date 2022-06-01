@@ -8,6 +8,7 @@ import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MyLoader } from '../loaders/MyLoader';
 import { TLoader } from '../loaders/TLoader';
+import { Texture } from 'three/src/textures/Texture.js';
 import FileLoader from '../loaders/FileLoader';
 
 export const useDesign = () => {
@@ -19,9 +20,7 @@ export const useDesign = () => {
     mode: { value: 'translate', options: ['translate', 'rotate', 'scale'] },
   });
   const texture = useLoader(TLoader, './dirt.jpg');
-
   const deleteObject = () => {
-    console.log('t', target);
     if (target) {
       setScene((prev) => {
         const children = prev.children.filter((el) => el !== target);
@@ -30,20 +29,16 @@ export const useDesign = () => {
       });
       setTarget(null);
     }
-    console.log(scene.children);
   };
 
   const saveScene = useCallback(async (body) => {
     const exporter = new GLTFExporter();
-    console.log('save-=', body);
     exporter.parse(scene, async function (gltf) {
       await request(`api/design/data/`, 'POST', {
         ...body,
         model: gltf,
       });
-      console.log('save-=1', body);
     });
-    console.log('save-=2', body);
   });
 
   const changeScene = useCallback(async (id) => {
@@ -63,7 +58,6 @@ export const useDesign = () => {
         (json) => {
           var loader = new MyLoader();
           loader.parse(json, function (gltf) {
-            console.log('ghj', gltf);
             let ob = {
               ...scene,
               children: [...gltf.scene.children],
@@ -78,6 +72,27 @@ export const useDesign = () => {
           console.log(err);
         }
       );
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  const makeTexture = (img) => {
+    const image = document.createElement('img');
+    image.src = JSON.parse(img);
+    let texture = new Texture(image);
+    texture.needsUpdate = true;
+
+    return texture;
+  };
+
+  const loadTextureById = useCallback(async (id) => {
+    try {
+      if (target) {
+        const { value } = await request(`api/design/data/${id}`, 'GET');
+        const texture = await makeTexture(value);
+        target.material.map = texture;
+      }
     } catch (e) {
       console.log(e);
     }
@@ -182,13 +197,13 @@ export const useDesign = () => {
     });
   };
 
-  function loadFromFile() {
+  async function loadFromFile() {
     new GLTFLoader().load('wall.txt', function (gltf) {
       let ob = {
         ...scene,
         children: [...scene.children, ...gltf.scene.children],
       };
-
+      ob.children[ob.children.length - 1].material.map = texture;
       ob.__proto__ = scene.__proto__;
       setScene(ob);
     });
@@ -201,7 +216,6 @@ export const useDesign = () => {
     target,
     mode,
     scene,
-    texture,
     handleExport,
     handleLoadFullScene,
     loadFromFile,
@@ -213,5 +227,6 @@ export const useDesign = () => {
     imageLoader,
     loadObjectById,
     deleteObject,
+    loadTextureById,
   };
 };
