@@ -1,10 +1,8 @@
 import { useState, useCallback } from 'react';
 import { useHttp } from './http.hook';
 
-export const useModal = () => {
+export const useModal = (form, setForm, setModalActive, type, filtered) => {
   const { request, loading, error } = useHttp();
-  const [modalActive, setModalActive] = useState(false);
-  const [form, setForm] = useState({ name: '', image: null, id: null });
 
   const changeName = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,22 +21,48 @@ export const useModal = () => {
     }
   };
 
-  const formHandler = useCallback(async () => {
-    const data = await request(`api/design/data/${form.id}`, 'PUT', {
-      ...form,
-    });
+  const changeModel = async (elm) => {
+    if (elm.files) {
+      new Response(elm.files[0]).json().then((json) => {
+        console.log('=', json);
+        setForm({ ...form, model: json });
+      });
+    }
+  };
+  const formHandler = async () => {
+    let data;
+    if (type === 'CHANGE') {
+      // data = await request(`api/design/data/${form.id}`, 'PUT', {
+      //   ...form,
+      // });
+
+      console.log('ch', form);
+      // setForm({
+      //   name: '',
+      //   image: null,
+      //   id: null,
+      // });
+    }
+    console.log(form);
+    if (type === 'ADD') {
+      console.log('add', form);
+      // data = await request(`api/design/data/`, 'POST', {
+      //   ...form,
+      //   type: filtered.type,
+      // });
+      // setForm({
+      //   name: '',
+      //   image: null,
+      //   id: null,
+      //   model: null,
+      // });
+    }
 
     setModalActive(false);
-  });
-
-  return {
-    modalActive,
-    setModalActive,
-    error,
-    changeName,
-    formHandler,
-    changeImage,
-    setForm,
-    form,
   };
+
+  if (form.model === null) {
+    return [error, changeName, formHandler, changeImage, changeModel];
+  }
+  return [error, changeName, formHandler, changeImage];
 };

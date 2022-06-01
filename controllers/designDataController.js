@@ -7,19 +7,21 @@ const config = require('../config/common');
 class designDataController {
   async saveData(req, res) {
     try {
-      const { model, name, type, image = null } = req.body;
+      const { model, name, type = null, image = null } = req.body;
       const userId = req.user.userId;
       const data = JSON.stringify(model);
 
-      if (!model || !name || !type) {
+      if (!model || !name) {
         return res.status(400).json({ message: 'Неверные данные' });
       }
       const haveImage = image !== null;
+      const projectType = await TypeData.findOne({ name: 'PROJECT' });
 
       const status = await StatusData.findOne({ name: 'PRIVATE' });
+
       const project = new DesignData({
         name,
-        type,
+        type: type !== null ? type : projectType,
         status: status.id,
         user: userId,
         image: haveImage,
@@ -174,60 +176,32 @@ class designDataController {
   async updateData(req, res) {
     try {
       const projectId = req.params.id;
-      const { model = null, name, image = null, type = null } = req.body;
+      const { model = null, name = null, image = null, type = null } = req.body;
       const data = JSON.stringify(model);
 
-      if (!name) {
-        return res.status(400).json({ message: 'Неверные данные' });
-      }
-      const haveImage = image !== null;
-      let project;
+      const ob = {};
+      if (name) ob.name = name;
+      if (model) ob.model = model;
+      if (image) ob.image = true;
+      if (type) ob.type = type;
 
-      if (model !== null) {
-        project = await DesignData.findOneAndUpdate(
-          {
-            _id: projectId,
-          },
-          {
-            $set: {
-              name,
-              model,
-              image: haveImage,
-            },
-          }
-        );
-      } else {
-        project = await DesignData.findOneAndUpdate(
-          {
-            _id: projectId,
-          },
-          {
-            $set: {
-              name,
-              image: haveImage,
-            },
-          }
-        );
-      }
+      let project = await DesignData.findOneAndUpdate(
+        {
+          _id: projectId,
+        },
+        {
+          $set: ob,
+        }
+      );
 
-      if (type !== null) {
-        project = await DesignData.findOneAndUpdate(
-          {
-            _id: projectId,
-          },
-          {
-            $set: {
-              type,
-            },
-          }
-        );
-      }
       if (!project) {
         return res.status(400).json({ message: 'Проекта не существует' });
       }
-      fs.writeFileSync(config.pathToFile + project.id + config.ext, data);
+      if (model) {
+        fs.writeFileSync(config.pathToFile + project.id + config.ext, data);
+      }
 
-      if (haveImage) {
+      if (image) {
         fs.writeFileSync(config.pathToImage + project.id + config.ext, image);
       }
 

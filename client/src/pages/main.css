@@ -146,7 +146,7 @@ ul {
     cursor: pointer;
     position: absolute;
     top: calc(50% - 150px);
-    z-index: 1;
+    z-index: 20;
     transition: all 0.9s;
     height: 300px;
     border-right: 3px solid rgb(255, 0, 136, 0.15);
@@ -157,7 +157,7 @@ ul {
     transform: translateX(-300px);
     color: #dddddd;
 
-    background-color: #7a7a7a2e;
+    background-color: rgb(17, 17, 21, 0.8);
     backdrop-filter: blur(10px);
     box-shadow: 0 0 40px rgb(8 7 16/60%);
 }

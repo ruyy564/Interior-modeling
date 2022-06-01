@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useData } from '../hooks/data.hook';
 import { useModal } from '../hooks/modal.hook';
 import { BurgerMenu } from '../components/BurgerMenu';
@@ -7,6 +7,7 @@ import { SubMenu } from '../components/SubMenu';
 import { StatusMenu } from '../components/StatusMenu';
 import Button from '../components/Common/Button';
 import { ModalChange } from '../components/ModalChange';
+import { ModalAdd } from '../components/ModalAdd';
 import './main.css';
 
 export default function MainPage() {
@@ -25,16 +26,17 @@ export default function MainPage() {
     accept,
   } = useData();
 
-  const {
-    modalActive,
-    setModalActive,
-    error,
-    changeName,
-    formHandler,
-    changeImage,
-    setForm,
-    form,
-  } = useModal();
+  const [modalActive, setModalActive] = useState(false);
+  const [form, setForm] = useState({ name: '', image: null, id: null });
+
+  const [modalAddActive, setModalAddActive] = useState(false);
+  const [formAdd, setFormAdd] = useState({
+    name: '',
+    image: null,
+    id: null,
+    model: null,
+  });
+
   return (
     <div className="main-page">
       <BurgerMenu />
@@ -50,8 +52,8 @@ export default function MainPage() {
           <div className="btn-add">
             <Button
               className={'log'}
-              value={'Загрузить проект'}
-              onClick={() => setModalActive(true)}
+              value={'|  Загрузить проект  |'}
+              onClick={() => setModalAddActive(true)}
             />
           </div>
         ) : (
@@ -93,12 +95,19 @@ export default function MainPage() {
         </div>
       </section>
       <ModalChange
+        form={form}
+        setForm={setForm}
         modalActive={modalActive}
         setModalActive={setModalActive}
-        error={error}
-        changeName={changeName}
-        formHandler={formHandler}
-        changeImage={changeImage}
+      />
+      <ModalAdd
+        modalActive={modalAddActive}
+        setModalActive={setModalAddActive}
+        form={formAdd}
+        setForm={setFormAdd}
+        filtered={filtered}
+        findByidType={findByidType}
+        type={type}
       />
     </div>
   );

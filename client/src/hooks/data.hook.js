@@ -97,6 +97,7 @@ export const useData = () => {
   }, [status, item, type]);
 
   const findByidType = (id) => {
+    console.log(id, 'dgjghj');
     return typeEnum[type.filter((el) => el._id == id)[0].name];
   };
 
