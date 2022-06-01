@@ -29,6 +29,7 @@ export default function CreateProjectPage() {
     loadSceneById,
     loadObjectById,
     saveScene,
+    deleteObject,
   } = useDesign();
 
   const { type, filtered, filterByType, findByidType, download } = useData();
@@ -64,6 +65,8 @@ export default function CreateProjectPage() {
           handleLoadFullScene={handleLoadFullScene}
           changeScene={changeScene}
           setModalActive={setModalActive}
+          deleteObject={deleteObject}
+          refControls={refControls}
         />
         <div className="content">
           <Design

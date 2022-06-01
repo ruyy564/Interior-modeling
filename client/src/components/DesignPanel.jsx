@@ -9,6 +9,8 @@ export const DesignPanel = ({
   saveScene,
   changeScene,
   setModalActive,
+  deleteObject,
+  refControls,
   id,
 }) => {
   const file = useRef();
@@ -41,7 +43,17 @@ export const DesignPanel = ({
             Добавить стену
           </a>
         </li>
-
+        <li>
+          <a
+            href="#"
+            onClick={() => {
+              refControls.current.enableRotate = true;
+              deleteObject();
+            }}
+          >
+            Удалить объект
+          </a>
+        </li>
         <li>
           <a href="#" onClick={() => handleExport(scene)}>
             Скачать

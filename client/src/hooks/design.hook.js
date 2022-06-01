@@ -20,6 +20,19 @@ export const useDesign = () => {
   });
   const texture = useLoader(TLoader, './dirt.jpg');
 
+  const deleteObject = () => {
+    console.log('t', target);
+    if (target) {
+      setScene((prev) => {
+        const children = prev.children.filter((el) => el !== target);
+
+        return { ...prev, children };
+      });
+      setTarget(null);
+    }
+    console.log(scene.children);
+  };
+
   const saveScene = useCallback(async (body) => {
     const exporter = new GLTFExporter();
     console.log('save-=', body);
@@ -199,5 +212,6 @@ export const useDesign = () => {
     changeScene,
     imageLoader,
     loadObjectById,
+    deleteObject,
   };
 };
