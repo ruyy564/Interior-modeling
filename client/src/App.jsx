@@ -6,7 +6,6 @@ import { AuthContext } from './context/AuthContext';
 
 export default function App() {
   const { token, login, logout, userId, role } = useAuth();
-  console.log('ad-role', role);
   const isAuthenticated = !!token;
   const isAdmin = role === 'ADMIN';
   const routes = useRoutes(isAuthenticated, isAdmin);

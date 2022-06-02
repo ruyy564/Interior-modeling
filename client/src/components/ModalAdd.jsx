@@ -13,6 +13,8 @@ export const ModalAdd = ({
   filtered,
   findByidType,
   type,
+  setItem,
+  setFilterd,
 }) => {
   const selectType = useRef();
   const { request, loading, error } = useHttp();
@@ -61,7 +63,13 @@ export const ModalAdd = ({
       ...form,
       type: type === null ? filtered.type : type,
     });
+    const obj = { ...data.project, image: form.image };
 
+    setItem((prev) => [...prev, obj]);
+    setFilterd((prev) => ({
+      ...prev,
+      item: [...prev.item, obj],
+    }));
     setModalActive(false);
   };
 

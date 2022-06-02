@@ -24,6 +24,8 @@ export default function MainPage() {
     deleteData,
     rejected,
     accept,
+    setItem,
+    setFilterd,
   } = useData();
 
   const [modalActive, setModalActive] = useState(false);
@@ -92,12 +94,16 @@ export default function MainPage() {
         </div>
       </section>
       <ModalChange
+        setItem={setItem}
+        setFilterd={setFilterd}
         form={form}
         setForm={setForm}
         modalActive={modalActive}
         setModalActive={setModalActive}
       />
       <ModalAdd
+        setItem={setItem}
+        setFilterd={setFilterd}
         modalActive={modalAddActive}
         setModalActive={setModalAddActive}
         form={formAdd}

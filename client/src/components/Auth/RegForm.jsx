@@ -22,6 +22,7 @@ export default function RegForm({ authHandler }) {
   const registerHandler = async (e) => {
     try {
       const data = await request('/api/auth/registration', 'POST', { ...form });
+      authHandler();
     } catch (e) {}
   };
 

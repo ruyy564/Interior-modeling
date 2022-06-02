@@ -33,7 +33,7 @@ class designDataController {
         fs.writeFileSync(config.pathToImage + project.id + config.ext, image);
       }
       await project.save();
-      res.status(201).json({ message: 'Проект сохранен' });
+      res.status(201).json({ message: 'Проект сохранен', project });
     } catch (e) {
       res.status(400).json({ message: 'Проект не сохранен', error: e });
       console.log(e);
@@ -116,7 +116,10 @@ class designDataController {
       if (!project) {
         return res.status(400).json({ message: 'Проекта не существует' });
       }
-      res.status(201).json({ message: 'Проект изменен' });
+      res.status(201).json({
+        message: 'Проект изменен',
+        status: status._id,
+      });
     } catch (e) {
       res.status(400).json({ message: 'Проект не изменен', error: e });
       console.log(e);
@@ -139,9 +142,11 @@ class designDataController {
       );
 
       if (!project) {
-        return res.status(400).json({ message: 'Проекта не существует' });
+        return res.status(400).json({
+          message: 'Проекта не существует',
+        });
       }
-      res.status(201).json({ message: 'Проект изменен' });
+      res.status(201).json({ message: 'Проект изменен', status: status._id });
     } catch (e) {
       res.status(400).json({ message: 'Проект не изменен', error: e });
       console.log(e);
@@ -166,7 +171,10 @@ class designDataController {
       if (!project) {
         return res.status(400).json({ message: 'Проекта не существует' });
       }
-      res.status(201).json({ message: 'Проект изменен' });
+      res.status(201).json({
+        message: 'Проект изменен',
+        status: status._id,
+      });
     } catch (e) {
       res.status(400).json({ message: 'Проект не изменен', error: e });
       console.log(e);
@@ -205,7 +213,7 @@ class designDataController {
         fs.writeFileSync(config.pathToImage + project.id + config.ext, image);
       }
 
-      res.status(201).json({ message: 'Проект изменен' });
+      res.status(201).json({ message: 'Проект изменен', project });
     } catch (e) {
       res.status(400).json({ message: 'Проект не изменен', error: e });
       console.log(e);

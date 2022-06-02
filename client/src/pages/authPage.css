@@ -175,6 +175,14 @@ button, input {
     height: 500px;
 }
 
+
+input:-webkit-autofill {
+    -webkit-text-fill-color: #dddddd !important;
+    -webkit-background-clip: text;
+}
+
+
+
 @media (max-width: 380px) {
     .shape-form {
         width: 300px;

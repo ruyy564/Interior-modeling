@@ -8,7 +8,6 @@ import AdminPanelPage from './pages/AdminPanelPage';
 import AuthPage from './pages/AuthPage';
 
 export const useRoutes = (isAuthenticated, isAdmin) => {
-  console.log('isAdmin', isAdmin);
   if (isAuthenticated) {
     return (
       <Routes>

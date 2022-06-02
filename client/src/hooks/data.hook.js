@@ -31,7 +31,6 @@ export const useData = () => {
     let data;
 
     if (role === 'ADMIN') {
-      console.log('sfgs');
       data = await request(`api/design/alldata/${userId}`, 'GET');
     } else {
       data = await request(`api/design/databyuser/${userId}`, 'GET');
@@ -42,21 +41,72 @@ export const useData = () => {
   };
 
   const publish = async (id) => {
-    await request(`api/design/publish/${id}`, 'PUT');
+    const data = await request(`api/design/publish/${id}`, 'PUT');
+    const status = data.status;
 
-    getData();
+    setItem((prev) => {
+      const newItem = prev.map((el) => {
+        if (el._id === id) {
+          el.status = status;
+        }
+
+        return el;
+      });
+
+      return [...newItem];
+    });
+
+    setFilterd((prev) => {
+      const newItem = prev.item.filter((el) => el._id !== id);
+
+      return { ...prev, item: [...newItem] };
+    });
   };
 
   const rejected = async (id) => {
-    await request(`api/design/cancel/${id}`, 'PUT');
+    const data = await request(`api/design/cancel/${id}`, 'PUT');
+    const status = data.status;
 
-    getData();
+    setItem((prev) => {
+      const newItem = prev.map((el) => {
+        if (el._id === id) {
+          el.status = status;
+        }
+
+        return el;
+      });
+
+      return [...newItem];
+    });
+
+    setFilterd((prev) => {
+      const newItem = prev.item.filter((el) => el._id !== id);
+
+      return { ...prev, item: [...newItem] };
+    });
   };
 
   const accept = async (id) => {
-    await request(`api/design/accept/${id}`, 'PUT');
+    const data = await request(`api/design/accept/${id}`, 'PUT');
+    const status = data.status;
 
-    getData();
+    setItem((prev) => {
+      const newItem = prev.map((el) => {
+        if (el._id === id) {
+          el.status = status;
+        }
+
+        return el;
+      });
+
+      return [...newItem];
+    });
+
+    setFilterd((prev) => {
+      const newItem = prev.item.filter((el) => el._id !== id);
+
+      return { ...prev, item: [...newItem] };
+    });
   };
 
   const download = async (id, type, ref) => {
@@ -135,5 +185,8 @@ export const useData = () => {
     deleteData,
     rejected,
     accept,
+    item,
+    setFilterd,
+    setItem,
   };
 };

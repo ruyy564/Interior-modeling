@@ -5,7 +5,14 @@ import Group from '../components/Common/Group';
 import Input from '../components/Common/Input';
 import Button from '../components/Common/Button';
 
-export const ModalChange = ({ form, setForm, modalActive, setModalActive }) => {
+export const ModalChange = ({
+  form,
+  setForm,
+  modalActive,
+  setModalActive,
+  setItem,
+  setFilterd,
+}) => {
   const { request, loading, error } = useHttp();
 
   const changeName = (e) => {
@@ -30,8 +37,35 @@ export const ModalChange = ({ form, setForm, modalActive, setModalActive }) => {
       ...form,
     });
 
+    setItem((prev) => {
+      const newItem = prev.map((el) => {
+        if (el._id === form.id) {
+          el.name = form.name !== null ? form.name : el.name;
+          el.image = form.image !== null ? form.image : el.image;
+        }
+
+        return el;
+      });
+
+      return [...newItem];
+    });
+
+    setFilterd((prev) => {
+      const newItem = prev.item.map((el) => {
+        if (el._id === form.id) {
+          el.name = form.name !== null ? form.name : el.name;
+          el.image = form.image !== null ? form.image : el.image;
+        }
+
+        return el;
+      });
+
+      return { ...prev, item: newItem };
+    });
+
     setModalActive(false);
   };
+
   return (
     <Modal active={modalActive} setActive={setModalActive}>
       <Group>
