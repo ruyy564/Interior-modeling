@@ -7,6 +7,7 @@ export const DesignPanel = ({
   handleExport,
   handleLoadFullScene,
   saveScene,
+  copyObject,
   changeScene,
   setModalActive,
   deleteObject,
@@ -41,6 +42,17 @@ export const DesignPanel = ({
         <li>
           <a href="#" onClick={loadFromFile}>
             Добавить стену
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            onClick={() => {
+              //refControls.current.enableRotate = true;
+              copyObject();
+            }}
+          >
+            Скопировать объект
           </a>
         </li>
         <li>

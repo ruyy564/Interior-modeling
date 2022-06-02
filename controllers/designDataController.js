@@ -232,12 +232,15 @@ class designDataController {
       let projectsUser = await DesignData.find({
         user: userId,
       });
-      let status = await StatusData.find({ name: 'PUBLIC' });
+      let status = await StatusData.findOne({ name: 'PUBLIC' });
 
       let projects = await DesignData.find({
         status: status._id,
       });
 
+      projectsUser = projectsUser.filter(
+        (el) => JSON.stringify(el.status) !== JSON.stringify(status._id)
+      );
       projects = projects.map((project) => {
         const image = project.image ? project.id : config.defaultImage;
         const contentImage = fs.readFileSync(
@@ -249,6 +252,51 @@ class designDataController {
 
         return newProject;
       });
+
+      projectsUser = projectsUser.map((project) => {
+        const image = project.image ? project.id : config.defaultImage;
+        const contentImage = fs.readFileSync(
+          config.pathToImage + image + config.ext,
+          'utf8'
+        );
+        const newProject = JSON.parse(JSON.stringify(project));
+        newProject.image = contentImage;
+
+        return newProject;
+      });
+
+      res.status(201).json({ projects: [...projects, ...projectsUser] });
+    } catch (e) {
+      res.status(400).json({ message: 'Проект не существует', error: e });
+      console.log(e);
+    }
+  }
+
+  async getAllData(req, res) {
+    try {
+      const userId = req.params.id;
+      const privateStatus = await StatusData.findOne({ name: 'PRIVATE' });
+      let projects = await DesignData.find();
+      let projectsUser = await DesignData.find({
+        user: userId,
+        status: privateStatus._id,
+      });
+
+      projects = projects.filter((el) => {
+        return JSON.stringify(el.status) !== JSON.stringify(privateStatus._id);
+      });
+      projects = projects.map((project) => {
+        const image = project.image ? project.id : config.defaultImage;
+        const contentImage = fs.readFileSync(
+          config.pathToImage + image + config.ext,
+          'utf8'
+        );
+        const newProject = JSON.parse(JSON.stringify(project));
+        newProject.image = contentImage;
+
+        return newProject;
+      });
+
       projectsUser = projectsUser.map((project) => {
         const image = project.image ? project.id : config.defaultImage;
         const contentImage = fs.readFileSync(

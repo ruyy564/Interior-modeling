@@ -23,7 +23,7 @@ export default function AuthForm({ authHandler }) {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form });
 
-      auth.login(data.token, data.userId);
+      auth.login(data.token, data.userId, data.role.name);
     } catch (e) {}
   };
   return (

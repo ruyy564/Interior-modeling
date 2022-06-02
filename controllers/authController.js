@@ -25,7 +25,7 @@ class authController {
         return res.status(400).json({ message: 'Пользователь уже существует' });
       }
       const hashPassword = await bcrypt.hash(password, 12);
-      const { id } = await UserRole.findOne({ name: 'USER' });
+      const { id } = await UserRole.findOne({ name: 'ADMIN' });
       const user = new User({
         email,
         nickname,
@@ -74,11 +74,13 @@ class authController {
         }
       );
 
+      const userRole = await UserRole.findOne({ _id: user.role });
+
       res.json({
         message: 'Пользователь авторизирован',
         token,
         userId: user.id,
-        roles: user.role,
+        role: userRole,
       });
     } catch (e) {
       console.log(e);

@@ -435,13 +435,15 @@ section {
 
 .item.small {
     width: 150px;
-    height: 150px;
+    height: 180px;
 }
 
-.item.small img {
-    width: 100px;
-    height: 100px;
+/* .item.small img {
+     width: 100px;
+    height: 100px; 
 }
+
+*/
 
 /* полоса прокрутки (скроллбар) */
 ::-webkit-scrollbar {

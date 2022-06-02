@@ -81,15 +81,12 @@ export default function MainPage() {
                   }
                 }}
                 reject={() => {
-                  console.log(findByidStatus(filtered.status));
-                  switch (findByidStatus(filtered.status)) {
-                    case 'На проверке':
-                      console.log('kjkhkj');
-                      rejected(el._id);
-                      break;
-                  }
+                  rejected(el._id);
                 }}
                 deleteData={deleteData}
+                findByidStatus={findByidStatus}
+                findByidType={findByidType}
+                filtered={filtered}
               />
             ))}
         </div>

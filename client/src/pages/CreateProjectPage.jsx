@@ -23,6 +23,7 @@ export default function CreateProjectPage() {
     loadFromFile,
     handleLoad,
     setTarget,
+    copyObject,
     changeScene,
     handleLoadFullScene,
     loadSceneById,
@@ -68,6 +69,7 @@ export default function CreateProjectPage() {
           setModalActive={setModalActive}
           deleteObject={deleteObject}
           refControls={refControls}
+          copyObject={copyObject}
         />
         <div className="content">
           <Design

@@ -8,16 +8,25 @@ import AdminPanelPage from './pages/AdminPanelPage';
 import AuthPage from './pages/AuthPage';
 
 export const useRoutes = (isAuthenticated, isAdmin) => {
+  console.log('isAdmin', isAdmin);
   if (isAuthenticated) {
     return (
       <Routes>
-        <Route path="/main" element={<MainPage />} />
         <Route path="/library" element={<LibraryPage />} />
         <Route path="/create:id" element={<CreateProjectPage />} />
         <Route path="/create" element={<CreateProjectPage />} />
         <Route path="/show:id" element={<ShowProjectPage />} />
-        {isAdmin && <Route path="/admin" element={<AdminPanelPage />} />}
-        <Route path="*" element={<CreateProjectPage />} />
+        {isAdmin ? (
+          <>
+            <Route path="/main" element={<AdminPanelPage />} />
+            <Route path="*" element={<AdminPanelPage />} />
+          </>
+        ) : (
+          <>
+            <Route path="/main" element={<MainPage />} />
+            <Route path="*" element={<MainPage />} />
+          </>
+        )}
       </Routes>
     );
   }

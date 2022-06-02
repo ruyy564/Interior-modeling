@@ -10,6 +10,7 @@ import { MyLoader } from '../loaders/MyLoader';
 import { TLoader } from '../loaders/TLoader';
 import { Texture } from 'three/src/textures/Texture.js';
 import FileLoader from '../loaders/FileLoader';
+import { Mesh, BufferGeometry, Material } from 'three';
 
 export const useDesign = () => {
   const { request, error } = useHttp();
@@ -20,6 +21,7 @@ export const useDesign = () => {
     mode: { value: 'translate', options: ['translate', 'rotate', 'scale'] },
   });
   const texture = useLoader(TLoader, './dirt.jpg');
+
   const deleteObject = () => {
     if (target) {
       setScene((prev) => {
@@ -28,6 +30,31 @@ export const useDesign = () => {
         return { ...prev, children };
       });
       setTarget(null);
+    }
+  };
+
+  const copyObject = () => {
+    if (target) {
+      setScene((prev) => {
+        const geometry = target.geometry.clone();
+        const material = target.material.clone();
+        const mesh = new Mesh(geometry, material);
+
+        mesh.scale.x = target.scale.x;
+        mesh.scale.y = target.scale.y;
+        mesh.scale.z = target.scale.z;
+
+        let ob = {
+          ...prev,
+          children: [...prev.children, mesh],
+        };
+
+        const newScene = new Scene();
+        ob.__proto__ = newScene;
+
+        return ob;
+      });
+      console.log(scene);
     }
   };
 
@@ -228,5 +255,6 @@ export const useDesign = () => {
     loadObjectById,
     deleteObject,
     loadTextureById,
+    copyObject,
   };
 };

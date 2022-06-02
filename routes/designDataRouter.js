@@ -5,77 +5,45 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = new Router();
 
-router.get(
-  '/statuses',
-  //[roleMiddleware(['ADMIN'])],
-  designDataController.getStatuses
-);
+router.get('/statuses', authMiddleware, designDataController.getStatuses);
 
-router.get(
-  '/types',
-  //[roleMiddleware(['ADMIN'])],
-  designDataController.getTypes
-);
+router.get('/types', authMiddleware, designDataController.getTypes);
 
 router.get(
   '/databytype/:id',
-  //[roleMiddleware(['ADMIN'])],
+  authMiddleware,
   designDataController.getDateByType
 );
 
 router.get(
   '/databystatus/:id',
-  //[roleMiddleware(['ADMIN'])],
+  authMiddleware,
   designDataController.getDataByStatusId
 );
 
 router.get(
   '/databyuser/:id',
-  //[roleMiddleware(['ADMIN'])],
+  authMiddleware,
   designDataController.getDataByUserId
 );
 
 router.get(
   '/catalogbyuser/:id',
-  //[roleMiddleware(['ADMIN'])],
+  authMiddleware,
   designDataController.getDataCatalog
 );
+router.get('/alldata/:id', authMiddleware, designDataController.getAllData);
+router.get('/data/:id', authMiddleware, designDataController.downloadData);
+router.post('/data', authMiddleware, designDataController.saveData);
 
-router.get(
-  '/data/:id',
-  //[roleMiddleware(['ADMIN'])],
-  designDataController.downloadData
-);
-router.post('/data', [roleMiddleware(['USER'])], designDataController.saveData);
+router.put('/data/:id', authMiddleware, designDataController.updateData);
 
-router.put(
-  '/data/:id',
-  //[roleMiddleware(['ADMIN'])],
-  designDataController.updateData
-);
+router.delete('/data/:id', authMiddleware, designDataController.deleteData);
 
-router.delete(
-  '/data/:id',
-  [roleMiddleware(['USER'])],
-  designDataController.deleteData
-);
+router.put('/publish/:id', authMiddleware, designDataController.publish);
 
-router.put(
-  '/publish/:id',
-  [roleMiddleware(['USER'])],
-  designDataController.publish
-);
+router.put('/cancel/:id', authMiddleware, designDataController.cancel);
 
-router.put(
-  '/cancel/:id',
-  [roleMiddleware(['USER'])],
-  designDataController.cancel
-);
-
-router.put(
-  '/accept/:id',
-  [roleMiddleware(['USER'])],
-  designDataController.accept
-);
+router.put('/accept/:id', authMiddleware, designDataController.accept);
 
 module.exports = router;

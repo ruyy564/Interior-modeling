@@ -26,8 +26,16 @@ export const useData = () => {
   };
 
   const getData = async () => {
+    const role = JSON.parse(localStorage.getItem('userData')).role;
     const { userId } = JSON.parse(localStorage.getItem('userData'));
-    const data = await request(`api/design/databyuser/${userId}`, 'GET');
+    let data;
+
+    if (role === 'ADMIN') {
+      console.log('sfgs');
+      data = await request(`api/design/alldata/${userId}`, 'GET');
+    } else {
+      data = await request(`api/design/databyuser/${userId}`, 'GET');
+    }
 
     setItem(data.projects);
     setFilterd(data.projects);
@@ -51,7 +59,7 @@ export const useData = () => {
     getData();
   };
 
-  const download = async (id) => {
+  const download = async (id, type, ref) => {
     const data = await request(`api/design/data/${id}`, 'GET');
 
     FileLoader.saveString(data.value, `${2}.gltf`);
