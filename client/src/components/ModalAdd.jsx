@@ -63,7 +63,10 @@ export const ModalAdd = ({
       ...form,
       type: type === null ? filtered.type : type,
     });
-    const obj = { ...data.project, image: form.image };
+    const obj = {
+      ...data.project,
+      image: form.image !== null ? form.image : data.image,
+    };
 
     setItem((prev) => [...prev, obj]);
     setFilterd((prev) => ({

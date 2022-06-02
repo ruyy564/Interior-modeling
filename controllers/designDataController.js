@@ -28,12 +28,24 @@ class designDataController {
       });
 
       fs.writeFileSync(config.pathToFile + project.id + config.ext, data);
-
+      let contentImage;
       if (haveImage) {
         fs.writeFileSync(config.pathToImage + project.id + config.ext, image);
+        contentImage = fs.readFileSync(
+          config.pathToImage + project.id + config.ext,
+          'utf8'
+        );
+      } else {
+        contentImage = fs.readFileSync(
+          config.pathToImage + config.defaultImage + config.ext,
+          'utf8'
+        );
       }
+
       await project.save();
-      res.status(201).json({ message: 'Проект сохранен', project });
+      res
+        .status(201)
+        .json({ message: 'Проект сохранен', project, image: contentImage });
     } catch (e) {
       res.status(400).json({ message: 'Проект не сохранен', error: e });
       console.log(e);

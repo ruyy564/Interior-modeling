@@ -23,6 +23,8 @@ export default function MainPage() {
     publish,
     deleteData,
     rejected,
+    setItem,
+    setFilterd,
     accept,
   } = useData();
 
@@ -72,11 +74,9 @@ export default function MainPage() {
                   switch (findByidStatus(filtered.status)) {
                     case 'Приватный':
                       publish(el._id);
-                      console.log('PRIVATE');
                       break;
                     case 'На проверке':
                       accept(el._id);
-                      console.log('CHECK');
                       break;
                   }
                 }}
@@ -92,12 +92,16 @@ export default function MainPage() {
         </div>
       </section>
       <ModalChange
+        setItem={setItem}
+        setFilterd={setFilterd}
         form={form}
         setForm={setForm}
         modalActive={modalActive}
         setModalActive={setModalActive}
       />
       <ModalAdd
+        setItem={setItem}
+        setFilterd={setFilterd}
         modalActive={modalAddActive}
         setModalActive={setModalAddActive}
         form={formAdd}
