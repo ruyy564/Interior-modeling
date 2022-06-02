@@ -17,7 +17,13 @@ export default function MainPage() {
         <div className="content">
           {filtered.item &&
             filtered.item.map((el) => (
-              <ItemLib key={el._id} el={el} download={download} />
+              <ItemLib
+                key={el._id}
+                el={el}
+                download={download}
+                findByidType={findByidType}
+                filtered={filtered}
+              />
             ))}
         </div>
       </section>

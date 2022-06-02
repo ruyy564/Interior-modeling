@@ -265,7 +265,7 @@ ul {
     justify-content: space-between;
     align-items: center;
     width: 200px;
-    height: 200px;
+    height: 180px;
     border-radius: 10px;
     background-color: #7a7a7a2e;
     color: #dddddd;
@@ -455,7 +455,7 @@ section {
 
 /* ползунок скроллбара */
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(51, 255, 0);
+    background-color: rgba(51, 255, 0, 0.637);
     border-radius: 9em;
 }
 
