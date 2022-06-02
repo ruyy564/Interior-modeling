@@ -9,6 +9,7 @@ import BackgroundForm from '../Auth/BackgroundForm';
 
 export default function RegForm({ authHandler }) {
   const { loading, error, request } = useHttp();
+  const [message, setMessage] = useState('');
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -22,13 +23,22 @@ export default function RegForm({ authHandler }) {
   const registerHandler = async (e) => {
     try {
       const data = await request('/api/auth/registration', 'POST', { ...form });
-      authHandler();
-    } catch (e) {}
+
+      setMessage(data.message);
+      setForm({
+        email: '',
+        password: '',
+        nickname: '',
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
     <>
       <Form>
+        {message && <span>{message}</span>}
         {error && <span>{error}</span>}
         <h2>Регистрация</h2>
         <Group>
