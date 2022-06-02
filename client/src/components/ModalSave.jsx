@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHttp } from '../hooks/http.hook';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { Modal } from '../components/Modal';
 import Group from '../components/Common/Group';
 import Input from '../components/Common/Input';
@@ -12,8 +13,8 @@ export const ModalSave = ({
   setModalActive,
   scene,
   saveScene,
-  error,
 }) => {
+  const { request, error } = useHttp();
   const changeName = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -32,13 +33,14 @@ export const ModalSave = ({
   };
 
   const formHandler = async () => {
-    console.log(form);
-    try {
-      await saveScene(form);
+    const exporter = new GLTFExporter();
+    exporter.parse(scene, async function (gltf) {
+      await request(`api/design/data/`, 'POST', {
+        ...form,
+        model: gltf,
+      });
       setModalActive(false);
-    } catch (e) {
-      console.log(error);
-    }
+    });
   };
   return (
     <Modal active={modalActive} setActive={setModalActive}>

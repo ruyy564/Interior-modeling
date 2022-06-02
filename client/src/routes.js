@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
+import LibraryPage from './pages/LibraryPage';
 import CreateProjectPage from './pages/CreateProjectPage';
 import ShowProjectPage from './pages/ShowProjectPage';
 import AdminPanelPage from './pages/AdminPanelPage';
@@ -11,10 +12,10 @@ export const useRoutes = (isAuthenticated, isAdmin) => {
     return (
       <Routes>
         <Route path="/main" element={<MainPage />} />
-
+        <Route path="/library" element={<LibraryPage />} />
         <Route path="/create:id" element={<CreateProjectPage />} />
         <Route path="/create" element={<CreateProjectPage />} />
-        <Route path="/show" element={<ShowProjectPage />} />
+        <Route path="/show:id" element={<ShowProjectPage />} />
         {isAdmin && <Route path="/admin" element={<AdminPanelPage />} />}
         <Route path="*" element={<CreateProjectPage />} />
       </Routes>

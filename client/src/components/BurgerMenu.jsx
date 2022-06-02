@@ -24,7 +24,7 @@ export const BurgerMenu = () => {
             <NavLink to="/main">Мои проекты</NavLink>
           </li>
           <li>
-            <NavLink to="/main">Библиотека</NavLink>
+            <NavLink to="/library">Библиотека</NavLink>
           </li>
           <li>
             <a href="/" onClick={logout}>

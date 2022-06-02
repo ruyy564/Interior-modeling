@@ -35,6 +35,7 @@ export const useHttp = () => {
         console.log(e.message);
         if (e.message === 'TokenExpiredError') {
           console.log(e.message);
+          localStorage.removeItem('userData');
           logout();
         }
         throw e;

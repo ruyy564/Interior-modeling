@@ -86,7 +86,7 @@ export default function CreateProjectPage() {
         modalActive={modalActive}
         setModalActive={setModalActive}
         saveScene={saveScene}
-        error={error}
+        scene={scene}
       />
     </div>
   );
