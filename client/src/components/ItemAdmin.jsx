@@ -161,6 +161,17 @@ export const ItemAdmin = ({
                 <a
                   href="#"
                   onClick={() => {
+                    openModal(true);
+                    setIdModal();
+                  }}
+                >
+                  Редактировать
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  onClick={() => {
                     download(el._id);
                   }}
                 >
@@ -203,6 +214,17 @@ export const ItemAdmin = ({
             <ul className="sub-menu">
               <li>
                 <NavLink to={`/show${el._id}`}>Открыть</NavLink>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  onClick={() => {
+                    openModal(true);
+                    setIdModal();
+                  }}
+                >
+                  Редактировать
+                </a>
               </li>
               <li>
                 <a

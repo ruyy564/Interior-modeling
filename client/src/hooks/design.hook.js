@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback } from 'react';
-import { useLoader } from '@react-three/fiber';
 import { useControls } from 'leva';
 import { useHttp } from './http.hook';
 import { Scene } from 'three';
@@ -9,7 +8,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MyLoader } from '../loaders/MyLoader';
 import { Texture } from 'three/src/textures/Texture.js';
 import FileLoader from '../loaders/FileLoader';
-import { Mesh } from 'three';
+import { Mesh, Object3D, BoxGeometry, MeshBasicMaterial } from 'three';
+
+import { TLoader } from '../loaders/TLoader';
+import { useLoader } from '@react-three/fiber';
 
 export const useDesign = () => {
   const { request, error } = useHttp();
@@ -24,8 +26,13 @@ export const useDesign = () => {
     if (target) {
       setScene((prev) => {
         const children = prev.children.filter((el) => el !== target);
+        let ob = {
+          ...prev,
+          children,
+        };
 
-        return { ...prev, children };
+        ob.__proto__ = scene.__proto__;
+        return ob;
       });
       setTarget(null);
     }
@@ -34,25 +41,51 @@ export const useDesign = () => {
   const copyObject = () => {
     if (target) {
       setScene((prev) => {
-        const geometry = target.geometry.clone();
-        const material = target.material.clone();
-        const mesh = new Mesh(geometry, material);
+        let ob;
+        if (target.type === 'Mesh') {
+          const geometry = target.geometry.clone();
+          const material = target.material.clone();
+          const mesh = new Mesh(geometry, material);
 
-        mesh.scale.x = target.scale.x;
-        mesh.scale.y = target.scale.y;
-        mesh.scale.z = target.scale.z;
+          mesh.scale.x = target.scale.x;
+          mesh.scale.y = target.scale.y;
+          mesh.scale.z = target.scale.z;
 
-        let ob = {
-          ...prev,
-          children: [...prev.children, mesh],
-        };
+          mesh.position.setX(target.position.x);
+          mesh.position.setY(target.position.y);
+          mesh.position.setZ(target.position.z);
+
+          ob = {
+            ...prev,
+            children: [...prev.children, mesh],
+          };
+        } else {
+          const group = new Object3D();
+          target.children.forEach((el) => {
+            const geometry = el.geometry.clone();
+            const material = el.material.clone();
+            const mesh = new Mesh(geometry, material);
+
+            mesh.scale.x = el.scale.x;
+            mesh.scale.y = el.scale.y;
+            mesh.scale.z = el.scale.z;
+
+            mesh.position.setX(el.position.x);
+            mesh.position.setY(el.position.y);
+            mesh.position.setZ(el.position.z);
+            group.add(mesh);
+          });
+          ob = {
+            ...prev,
+            children: [...prev.children, group],
+          };
+        }
 
         const newScene = new Scene();
         ob.__proto__ = newScene;
 
         return ob;
       });
-      console.log(scene);
     }
   };
 
@@ -82,10 +115,19 @@ export const useDesign = () => {
       new Response(value).json().then(
         (json) => {
           var loader = new MyLoader();
+
           loader.parse(json, function (gltf) {
+            let group = new Object3D();
+            let haveGroup = gltf.scene.children.map((el) => {
+              if (el.type === 'Mesh') {
+                group.add(el);
+              } else {
+                return el;
+              }
+            });
             let ob = {
               ...scene,
-              children: [...gltf.scene.children],
+              children: [...haveGroup, group],
             };
             const newScene = new Scene();
             ob.__proto__ = newScene;
@@ -116,8 +158,24 @@ export const useDesign = () => {
       if (target) {
         const { value } = await request(`api/design/data/${id}`, 'GET');
         const texture = await makeTexture(value);
-        target.material.map = texture;
-        console.log('click', texture, target.material.map, scene);
+
+        setScene((prev) => {
+          let elems = prev.children.filter((el) => el !== target);
+          if (target.type === 'Object3D') {
+            target.children.forEach((el) => (el.material.map = texture));
+          } else {
+            target.material.map = texture;
+          }
+
+          let ob = {
+            ...prev,
+            children: [...elems, target],
+          };
+
+          ob.__proto__ = scene.__proto__;
+
+          return ob;
+        });
       }
     } catch (e) {
       console.log(e);
@@ -132,15 +190,24 @@ export const useDesign = () => {
         (json) => {
           var loader = new MyLoader();
           loader.parse(json, function (gltf) {
-            console.log('ghj', gltf);
+            let group = new Object3D();
+            let haveGroup = gltf.scene.children.map((el) => {
+              if (el.type === 'Mesh') {
+                group.add(el);
+              } else {
+                return el;
+              }
+            });
+            console.log(haveGroup, group);
             let ob = {
               ...scene,
-              children: [...scene.children, ...gltf.scene.children],
+              children: [...scene.children, ...haveGroup, group],
             };
             const newScene = new Scene();
             ob.__proto__ = newScene;
             setScene(ob);
             setTarget(null);
+            console.log(scene);
           });
         },
         (err) => {
@@ -157,7 +224,6 @@ export const useDesign = () => {
       const fileReader = new FileReader();
       fileReader.onload = function (fileLoadedEvent) {
         const srcData = fileLoadedEvent.target.result;
-        console.log('srcData', srcData);
       };
       fileReader.readAsDataURL(elm.files[0]);
     }
@@ -171,11 +237,19 @@ export const useDesign = () => {
           var loader = new MyLoader();
 
           loader.parse(json, function (gltf) {
+            let group = new Object3D();
+            let haveGroup = gltf.scene.children.map((el) => {
+              if (el.type === 'Mesh') {
+                group.add(el);
+              } else {
+                return el;
+              }
+            });
+
             let ob = {
               ...scene,
-              children: [...gltf.scene.children],
+              children: [...haveGroup, group],
             };
-            console.log('ob', ob);
             ob.__proto__ = scene.__proto__;
             setScene(ob);
             setTarget(null);
@@ -197,9 +271,17 @@ export const useDesign = () => {
           var loader = new MyLoader();
 
           loader.parse(json, function (gltf) {
+            let group = new Object3D();
+            let haveGroup = gltf.scene.children.map((el) => {
+              if (el.type === 'Mesh') {
+                group.add(el);
+              } else {
+                return el;
+              }
+            });
             let ob = {
               ...scene,
-              children: [...scene.children, ...gltf.scene.children],
+              children: [...scene.children, ...haveGroup, group],
             };
 
             ob.__proto__ = scene.__proto__;
@@ -217,7 +299,7 @@ export const useDesign = () => {
 
   const handleExport = (scene) => {
     const exporter = new GLTFExporter();
-
+    console.log(scene);
     exporter.parse(scene, function (gltf) {
       FileLoader.saveString(JSON.stringify(gltf), `${2}.gltf`);
     });
@@ -225,11 +307,36 @@ export const useDesign = () => {
 
   async function loadFromFile() {
     new GLTFLoader().load('wall.txt', function (gltf) {
+      let group = new Object3D();
+      let haveGroup;
+      // let haveGroup = gltf.scene.children.filter((el) => {
+      //   if (el.type === 'Mesh') group.add(el);
+      //   return el.type !== 'Mesh';
+      // });
+      var boxGeometry = new BoxGeometry(10, 10, 10);
+      var basicMaterial = new MeshBasicMaterial({ color: 0x0095dd });
+      var cube = new Mesh(boxGeometry, basicMaterial);
+      group.add(cube);
+      let chld = [];
+      if (haveGroup) chld = [...haveGroup];
+      if (group.children.length !== 0) chld.push(group);
+
+      console.log(chld);
       let ob = {
         ...scene,
-        children: [...scene.children, ...gltf.scene.children],
+        children: [...scene.children, ...chld],
       };
-      ob.children[ob.children.length - 1].material.map = new Texture();
+      const image = document.createElement('img');
+      let texture = new Texture(image);
+
+      ob.children.forEach((el) => {
+        if (el.type === 'Mesh') {
+          el.material.map = texture;
+        } else {
+          el.children.forEach((el) => (el.material.map = texture));
+        }
+      });
+
       ob.__proto__ = scene.__proto__;
       setScene(ob);
     });

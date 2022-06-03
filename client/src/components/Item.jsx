@@ -13,13 +13,7 @@ export const Item = ({
 }) => {
   return (
     <div key={el._id} className="item">
-      <div
-        className="img"
-        style={{
-          background: `url(${el.image}) no-repeat center `,
-          backgroundSize: 'contain',
-        }}
-      />
+      <img src={el.image} alt="...упс" />
       <span>{el.name}</span>
       {findByidType(filtered.type) === 'Текстура' &&
         findByidStatus(filtered.status) === 'Приватный' && (

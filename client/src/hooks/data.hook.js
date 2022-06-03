@@ -125,7 +125,6 @@ export const useData = () => {
     getStatuses();
     getTypes();
     getData();
-    console.log('data');
   }, []);
 
   const filterByType = (id) => {

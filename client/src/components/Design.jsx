@@ -38,7 +38,8 @@ export default function Design({
           {scene !== null &&
             scene.children
               .filter((element) => {
-                if (element?.type === 'Mesh') return true;
+                if (element?.type === 'Mesh' || element?.type === 'Object3D')
+                  return true;
               })
               .map((element) => {
                 return (

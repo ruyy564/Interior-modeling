@@ -133,13 +133,18 @@ ul {
 
 .content-wrapper {
     width: 100%;
-    height: 100%;
+    height: 100vh;
 }
 
 .content {
     width: 100%;
     display: flex;
     justify-content: center;
+    overflow-y: auto;
+}
+
+.content-menu .content {
+    overflow: visible
 }
 
 .content-menu {
@@ -276,10 +281,10 @@ ul {
 
 
 
-.item .img {
+.item img {
     width: 200px;
     height: 150px;
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
 }
 

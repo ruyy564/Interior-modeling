@@ -6,7 +6,7 @@ export const Model = ({ object, camera }) => {
   const blockOrtoginationControll = (e) => {
     e.stopPropagation();
     camera.current.enableRotate = false;
-    setTarget(e.object);
+    setTarget(e.object.parent);
   };
 
   const unblockOrtoginationControll = (e) => {
@@ -14,10 +14,6 @@ export const Model = ({ object, camera }) => {
     setTarget(null);
     camera.current.enableRotate = true;
   };
-
-  // object.material.map = object.material.map
-  //   ? object.material.map
-  //   : new Texture();
 
   return (
     <primitive
