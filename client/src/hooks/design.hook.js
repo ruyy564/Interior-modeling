@@ -7,10 +7,9 @@ import { useStore } from '../hooks/store.hook';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MyLoader } from '../loaders/MyLoader';
-import { TLoader } from '../loaders/TLoader';
 import { Texture } from 'three/src/textures/Texture.js';
 import FileLoader from '../loaders/FileLoader';
-import { Mesh, BufferGeometry, Material } from 'three';
+import { Mesh } from 'three';
 
 export const useDesign = () => {
   const { request, error } = useHttp();
@@ -20,7 +19,6 @@ export const useDesign = () => {
   const { mode } = useControls({
     mode: { value: 'translate', options: ['translate', 'rotate', 'scale'] },
   });
-  const texture = useLoader(TLoader, './dirt.jpg');
 
   const deleteObject = () => {
     if (target) {
@@ -119,6 +117,7 @@ export const useDesign = () => {
         const { value } = await request(`api/design/data/${id}`, 'GET');
         const texture = await makeTexture(value);
         target.material.map = texture;
+        console.log('click', texture, target.material.map, scene);
       }
     } catch (e) {
       console.log(e);
@@ -230,7 +229,7 @@ export const useDesign = () => {
         ...scene,
         children: [...scene.children, ...gltf.scene.children],
       };
-      ob.children[ob.children.length - 1].material.map = texture;
+      ob.children[ob.children.length - 1].material.map = new Texture();
       ob.__proto__ = scene.__proto__;
       setScene(ob);
     });

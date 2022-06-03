@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { useData } from '../hooks/data.hook';
-import { useModal } from '../hooks/modal.hook';
 import { BurgerMenu } from '../components/BurgerMenu';
 import { Item } from '../components/Item';
 import { SubMenu } from '../components/SubMenu';
@@ -62,33 +61,35 @@ export default function MainPage() {
           ''
         )}
         <div className="content">
-          {filtered.item &&
-            filtered.item.map((el) => (
-              <Item
-                key={el._id}
-                el={el}
-                download={download}
-                openModal={setModalActive}
-                setIdModal={() => setForm({ ...form, id: el._id })}
-                publish={() => {
-                  switch (findByidStatus(filtered.status)) {
-                    case 'Приватный':
-                      publish(el._id);
-                      break;
-                    case 'На проверке':
-                      accept(el._id);
-                      break;
-                  }
-                }}
-                reject={() => {
-                  rejected(el._id);
-                }}
-                deleteData={deleteData}
-                findByidStatus={findByidStatus}
-                findByidType={findByidType}
-                filtered={filtered}
-              />
-            ))}
+          <Suspense fallback={<div>Loading... </div>}>
+            {filtered.item &&
+              filtered.item.map((el) => (
+                <Item
+                  key={el._id}
+                  el={el}
+                  download={download}
+                  openModal={setModalActive}
+                  setIdModal={() => setForm({ ...form, id: el._id })}
+                  publish={() => {
+                    switch (findByidStatus(filtered.status)) {
+                      case 'Приватный':
+                        publish(el._id);
+                        break;
+                      case 'На проверке':
+                        accept(el._id);
+                        break;
+                    }
+                  }}
+                  reject={() => {
+                    rejected(el._id);
+                  }}
+                  deleteData={deleteData}
+                  findByidStatus={findByidStatus}
+                  findByidType={findByidType}
+                  filtered={filtered}
+                />
+              ))}
+          </Suspense>
         </div>
       </section>
       <ModalChange
