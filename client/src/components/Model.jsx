@@ -7,6 +7,7 @@ export const Model = ({ object, camera }) => {
     e.stopPropagation();
     camera.current.enableRotate = false;
     setTarget(e.object.parent);
+    //setTarget(e.object);
   };
 
   const unblockOrtoginationControll = (e) => {

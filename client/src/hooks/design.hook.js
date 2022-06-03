@@ -69,12 +69,25 @@ export const useDesign = () => {
             mesh.scale.x = el.scale.x;
             mesh.scale.y = el.scale.y;
             mesh.scale.z = el.scale.z;
+            mesh.rotateX = el.rotateX;
+            mesh.rotateY = el.rotateY;
+            mesh.rotateZ = el.rotateZ;
 
             mesh.position.setX(el.position.x);
             mesh.position.setY(el.position.y);
             mesh.position.setZ(el.position.z);
             group.add(mesh);
           });
+          group.scale.x = target.scale.x;
+          group.scale.y = target.scale.y;
+          group.scale.z = target.scale.z;
+          group.rotateX = target.rotateX;
+          group.rotateY = target.rotateY;
+          group.rotateZ = target.rotateZ;
+
+          group.position.setX(target.position.x);
+          group.position.setY(target.position.y);
+          group.position.setZ(target.position.z);
           ob = {
             ...prev,
             children: [...prev.children, group],
@@ -158,24 +171,11 @@ export const useDesign = () => {
       if (target) {
         const { value } = await request(`api/design/data/${id}`, 'GET');
         const texture = await makeTexture(value);
-
-        setScene((prev) => {
-          let elems = prev.children.filter((el) => el !== target);
-          if (target.type === 'Object3D') {
-            target.children.forEach((el) => (el.material.map = texture));
-          } else {
-            target.material.map = texture;
-          }
-
-          let ob = {
-            ...prev,
-            children: [...elems, target],
-          };
-
-          ob.__proto__ = scene.__proto__;
-
-          return ob;
-        });
+        if (target.type === 'Object3D') {
+          target.children.forEach((el) => (el.material.map = texture));
+        } else {
+          target.material.map = texture;
+        }
       }
     } catch (e) {
       console.log(e);
@@ -269,21 +269,24 @@ export const useDesign = () => {
       new Response(elm.files[0]).json().then(
         (json) => {
           var loader = new MyLoader();
-
           loader.parse(json, function (gltf) {
             let group = new Object3D();
-            let haveGroup = gltf.scene.children.map((el) => {
-              if (el.type === 'Mesh') {
-                group.add(el);
-              } else {
-                return el;
+            let haveGroup = gltf.scene.children.filter(
+              (el) => el.type !== 'Mesh'
+            );
+            gltf.scene.children.forEach((el) => {
+              if (el.type == 'Mesh') {
+                group.add(new Mesh().copy(el));
               }
             });
+            let chld = [];
+            if (haveGroup) chld = [...haveGroup];
+            if (group.children.length !== 0) chld.push(group);
+
             let ob = {
               ...scene,
-              children: [...scene.children, ...haveGroup, group],
+              children: [...scene.children, ...gltf.scene.children],
             };
-
             ob.__proto__ = scene.__proto__;
             setScene(ob);
           });
@@ -297,49 +300,44 @@ export const useDesign = () => {
     elm.value = '';
   };
 
-  const handleExport = (scene) => {
+  const handleExport = () => {
     const exporter = new GLTFExporter();
-    console.log(scene);
-    exporter.parse(scene, function (gltf) {
+    console.log();
+    exporter.parse(scene.children.slice(4), function (gltf) {
+      console.log(gltf);
       FileLoader.saveString(JSON.stringify(gltf), `${2}.gltf`);
     });
   };
 
   async function loadFromFile() {
-    new GLTFLoader().load('wall.txt', function (gltf) {
-      let group = new Object3D();
-      let haveGroup;
-      // let haveGroup = gltf.scene.children.filter((el) => {
-      //   if (el.type === 'Mesh') group.add(el);
-      //   return el.type !== 'Mesh';
-      // });
-      var boxGeometry = new BoxGeometry(10, 10, 10);
-      var basicMaterial = new MeshBasicMaterial({ color: 0x0095dd });
-      var cube = new Mesh(boxGeometry, basicMaterial);
-      group.add(cube);
-      let chld = [];
-      if (haveGroup) chld = [...haveGroup];
-      if (group.children.length !== 0) chld.push(group);
+    let group = new Object3D();
+    var boxGeometry = new BoxGeometry(0.2, 2, 0.2);
+    var basicMaterial = new MeshBasicMaterial({ color: 0x0095dd });
+    var cube = new Mesh(boxGeometry);
+    const image = document.createElement('img');
+    let texture = new Texture(image);
+    group.add(
+      new Mesh(boxGeometry),
+      new Mesh(boxGeometry),
+      new Mesh(boxGeometry),
+      new Mesh(boxGeometry),
+      new Mesh(boxGeometry)
+    );
 
-      console.log(chld);
-      let ob = {
-        ...scene,
-        children: [...scene.children, ...chld],
-      };
-      const image = document.createElement('img');
-      let texture = new Texture(image);
+    let chld = [];
+    if (group.children.length !== 0) chld.push(group);
 
-      ob.children.forEach((el) => {
-        if (el.type === 'Mesh') {
-          el.material.map = texture;
-        } else {
-          el.children.forEach((el) => (el.material.map = texture));
-        }
-      });
+    let ob = {
+      ...scene,
+      children: [...scene.children, ...chld],
+    };
 
-      ob.__proto__ = scene.__proto__;
-      setScene(ob);
-    });
+    ob.children[ob.children.length - 1].children.forEach(
+      (el) => (el.material.map = texture)
+    );
+
+    ob.__proto__ = scene.__proto__;
+    setScene(ob);
   }
 
   return {
