@@ -39,11 +39,11 @@ export const DesignPanel = ({
           />
           <label htmlFor="file">Добавить в проект</label>
         </li>
-        <li>
+        {/* <li>
           <a href="#" onClick={loadFromFile}>
             Добавить стену
           </a>
-        </li>
+        </li> */}
         <li>
           <a
             href="#"

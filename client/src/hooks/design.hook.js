@@ -285,7 +285,7 @@ export const useDesign = () => {
 
             let ob = {
               ...scene,
-              children: [...scene.children, ...gltf.scene.children],
+              children: [...scene.children, ...chld],
             };
             ob.__proto__ = scene.__proto__;
             setScene(ob);

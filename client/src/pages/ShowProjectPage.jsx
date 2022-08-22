@@ -37,7 +37,7 @@ export default function CreateProjectPage() {
     <div className="main-page">
       <BurgerMenu />
       <section className="content-wrapper">
-        <h2>Создать проект</h2>
+        <h2>Просмотреть проект</h2>
         <DesignPanel
           scene={scene}
           handleExport={handleExport}
