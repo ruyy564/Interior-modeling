@@ -11,5 +11,20 @@ Online interior design software
 - the developed software will allow modeling interiors, sharing simulated interiors with other users, uploading custom objects and textures to the project, and also offering them for saving to a common library that can be used by every IP user.
 
 # Screens
-![Иллюстрация к проекту](https://github.com/ruyy564/Images/tree/master/11.png)
-![в](https://user-images.githubusercontent.com/87094243/185925575-296633a1-ce79-48ef-ba73-375a63f5f43e.png)
+## Авторизация
+![Авторизация](https://user-images.githubusercontent.com/87094243/185925746-c633db5f-caa7-4cb4-9cb9-35c58caa4b6a.png)
+
+## Основная страница
+![Основная страница](https://user-images.githubusercontent.com/87094243/185925789-8c3fb64a-a58f-443b-bf55-2e6c2d260a70.png)
+
+## Модальное окно
+![Модальное окно](https://user-images.githubusercontent.com/87094243/185925828-461d4b2a-41c5-48e3-8c2c-fd3b2cfab3e7.png)
+
+## Страница создания интерьера
+![Страница создания интерьера](https://user-images.githubusercontent.com/87094243/185925884-726785f9-f097-4d07-9487-f85d1ddee564.png)
+
+## Страница просмотра интерьера
+![Страница просмотра интерьера](https://user-images.githubusercontent.com/87094243/185925955-7dfe6966-0fa5-45e8-b3a9-54f074a61f52.png)
+
+## Иллюстрация к проекту
+![Иллюстрация к проекту](https://user-images.githubusercontent.com/87094243/185925575-296633a1-ce79-48ef-ba73-375a63f5f43e.png)
