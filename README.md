@@ -1,6 +1,5 @@
-# Interior-modeling
+# Interior-modeling(Full project in Develop branch)
 Online interior design software
-(Full project in Develop branch)
 
 # Development tools
 - code editor Visual Studio Code 1.66.2, library for creating external user interfaces React 18.1.0, library for working with 3D graphics Three js 0.139.2, framework for creating an API for interacting with the database - Express 4.14.0, base data Mongo db 2.2.16.
