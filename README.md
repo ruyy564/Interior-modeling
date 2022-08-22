@@ -9,3 +9,6 @@ Online interior design software
 
 # The significance of the work 
 - the developed software will allow modeling interiors, sharing simulated interiors with other users, uploading custom objects and textures to the project, and also offering them for saving to a common library that can be used by every IP user.
+
+# Screens
+![Иллюстрация к проекту](https://github.com/ruyy564/Images/tree/master/11.png)
