@@ -1,0 +1,499 @@
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: rgb(93, 92, 92);
+}
+
+.main-page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #080710;
+    color: #dddddd;
+    width: 100%;
+    min-height: 100%;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65px;
+    width: 100%;
+}
+
+.burger {
+    z-index: 10;
+    transition: all 1.9;
+    position: relative;
+    transform: rotate(0deg);
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #dddddd;
+}
+
+.burger::after {
+    top: 15px;
+}
+
+.burger::before {
+    bottom: 15px;
+}
+
+.burger::after, .burger::before {
+    transition: all 0.9s;
+    transform: rotate(0deg);
+    content: "";
+    left: 10px;
+    position: absolute;
+    width: 30px;
+    height: 5px;
+    background-color: #080710;
+}
+
+
+ul {
+
+    font-size: 30px;
+    list-style: none;
+}
+
+.menu {
+    z-index: 10;
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    top: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu li {
+    margin: 0 5px;
+}
+
+
+/* .open+.menu {
+    display: flex;
+} */
+
+.burger.open::before {
+    background-color: #dddddd;
+    transition: all 0.9s;
+    bottom: 22px;
+    transform: rotate(45deg);
+}
+
+.burger.open::after {
+    background-color: #dddddd;
+    transition: all 0.9s;
+    top: 22px;
+    transform: rotate(-45deg);
+}
+
+.open {
+    background-color: #080710;
+}
+
+.circle {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: culc(50%-25px);
+    z-index: 9;
+    transition: all 0.9s;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #dddddd;
+    transform: scale(1);
+}
+
+.open+.circle {
+
+    transform: scale(10);
+}
+
+.open~.menu {
+    color: #080710;
+    display: flex;
+}
+
+.nav {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.content-wrapper {
+    width: 100%;
+    height: 100vh;
+}
+
+.content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.content-menu .content {
+    overflow: visible
+}
+
+.content-menu {
+    cursor: pointer;
+    position: absolute;
+    top: calc(50% - 150px);
+    z-index: 20;
+    transition: all 0.9s;
+    height: 300px;
+    border-right: 3px solid rgb(255, 0, 136, 0.15);
+    left: 0;
+    padding: 30px;
+    width: 300px;
+    border-radius: 10px;
+    transform: translateX(-300px);
+    color: #dddddd;
+
+    background-color: rgb(17, 17, 21, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgb(8 7 16/60%);
+}
+
+.line {
+    cursor: pointer;
+    transition: all 0.9s;
+    z-index: 1;
+    width: 50px;
+    height: 50px;
+    content: "";
+    position: absolute;
+    left: 275px;
+    top: calc(50% - 20px);
+    background-color: rgb(255, 0, 136);
+    border-radius: 50%;
+    transform: translateX(-300px);
+}
+
+.content-menu.open+.line {
+
+    background-color: rgb(51, 255, 0);
+}
+
+.content-menu.open {
+
+    border-right: 3px solid rgb(51, 255, 0, 0.15);
+}
+
+.content-menu.open, .content-menu.open+.line {
+
+    transform: translateX(-20px);
+}
+
+.content-menu .sub-menu li {
+    position: relative;
+}
+
+.content-menu .sub-menu {
+
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.content-menu .sub-menu li::after {
+
+    width: 20px;
+    height: 20px;
+    right: -40px;
+    top: 0;
+}
+
+.content-menu .sub-menu li::before {
+
+    width: 10px;
+    height: 10px;
+    right: -50px;
+    top: 10px;
+}
+
+.content-menu .sub-menu li::after, .content-menu .sub-menu li::before {
+    position: absolute;
+
+    border-radius: 50%;
+    content: "";
+}
+
+.content-menu .sub-menu li:hover::after, .content-menu .sub-menu li:hover::before {
+
+    background-color: rgb(51, 255, 0);
+}
+
+.item-back {
+    display: flex;
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 0px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #dddddd;
+    overflow: hidden;
+    transition: all 0.9s;
+
+    /* border-bottom: 3px solid rgb(255, 0, 136, 0.15); */
+    background-color: #7a7a7a2e;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgb(8 7 16/60%);
+}
+
+.item {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+    height: 180px;
+    border-radius: 10px;
+    background-color: #7a7a7a2e;
+    color: #dddddd;
+    overflow: hidden;
+    transition: all 0.9s;
+    margin: 10px;
+}
+
+
+
+.item img {
+    width: 200px;
+    height: 150px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.set {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    right: 0;
+}
+
+ul.setting {
+    font-size: 16px;
+}
+
+.burger.setting, .circle.setting {
+    width: 30px;
+    height: 30px;
+}
+
+.burger.setting::after {
+    width: 20px;
+    height: 5px;
+    transform: rotate(45deg);
+}
+
+.burger.setting::before {
+    width: 20px;
+    height: 5px;
+    transform: rotate(-45deg);
+}
+
+.item:hover>.item-back {
+    width: 200px;
+    height: 200px;
+}
+
+.item-back .sub-menu {
+    font-size: 16px;
+    text-align: center;
+}
+
+.item-back .sub-menu li {
+    position: relative;
+}
+
+.item-back .sub-menu li:hover::after {
+    position: absolute;
+    top: 10px;
+    right: -40px;
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(51, 255, 0);
+}
+
+.item-back .sub-menu li:hover::before {
+    position: absolute;
+    top: 0px;
+    right: -30px;
+    content: "";
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(51, 255, 0, 0.8);
+}
+
+.item-back {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.status {
+    display: flex;
+    justify-content: space-around;
+    font-size: 16px;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content {
+    position: relative;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 30px;
+    height: 80%;
+
+}
+
+.status li {
+    margin: 10px;
+}
+
+.create {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: calc(50% - 500px);
+    width: 1000px;
+    height: 500px;
+}
+
+.content-menu {
+    overflow-y: auto;
+}
+
+
+.change-modal {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #dddddd;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+}
+
+.change-modal.open {
+    display: flex;
+}
+
+.btn-add {
+    display: flex;
+    align-items: center;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile+label {
+    position: static;
+    display: inline-block;
+}
+
+.inputfile:focus+label,
+.inputfile+label:hover {
+    cursor: pointer;
+    color: rgb(93, 92, 92);
+}
+
+.item.small {
+    width: 150px;
+    height: 180px;
+}
+
+/* .item.small img {
+     width: 100px;
+    height: 100px; 
+}
+
+*/
+
+/* полоса прокрутки (скроллбар) */
+::-webkit-scrollbar {
+    width: 10px;
+    /* ширина для вертикального скролла */
+    height: 4px;
+    /* высота для горизонтального скролла */
+}
+
+/* ползунок скроллбара */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(51, 255, 0, 0.637);
+    border-radius: 9em;
+}
+
+
+
+/* Стрелки */
+
+::-webkit-scrollbar-button:vertical:start:decrement {
+    background: linear-gradient(120deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(240deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(0deg, #02141a 30%, rgba(0, 0, 0, 0) 31%);
+    background-color: #f6f8f4;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment {
+    background:
+        linear-gradient(300deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(60deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(180deg, #02141a 30%, rgba(0, 0, 0, 0) 31%);
+    background-color: #f6f8f4;
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement {
+    background:
+        linear-gradient(30deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(150deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(270deg, #02141a 30%, rgba(0, 0, 0, 0) 31%);
+}
+
+::-webkit-scrollbar-button:horizontal:end:increment {
+    background:
+        linear-gradient(210deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(330deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(90deg, #02141a 30%, rgba(0, 0, 0, 0) 31%);
+}

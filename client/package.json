@@ -1,0 +1,56 @@
+{
+    "name": "mixing-html-and-webgl",
+    "version": "1.0.0",
+    "description": "Adding HTML into the scene.",
+    "keywords": [
+        "html",
+        "transforms",
+        "drei"
+    ],
+    "main": "src/index.jsx",
+    "dependencies": {
+        "@react-three/cannon": "^6.3.0",
+        "@react-three/drei": "9.5.3",
+        "@react-three/fiber": "8.0.12",
+        "antd": "4.20.1",
+        "leva": "^0.9.23",
+        "react": "18.1.0",
+        "react-dom": "18.1.0",
+        "react-router-dom": "^6.3.0",
+        "react-scripts": "^5.0.1",
+        "recoil": "^0.7.2",
+        "three": "0.139.2"
+    },
+    "proxy":"http://localhost:5000/",
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS -g ../config/git/commitlint.js"
+        }
+    },
+    "config": {
+        "commitizen": {
+            "path": "client/node_modules/cz-customizable"
+        },
+        "cz-customizable": {
+            "config": "../config/git/commitizen.js"
+        }
+    },
+    "devDependencies": {
+        "commitizen": "^1.0.4",
+        "cz-customizable": "^6.3.0",
+        "husky": "^7.0.4",
+        "prettier": "^2.6.2"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ]
+}
